@@ -17,7 +17,7 @@
 src/
 ├── products/           # 產品模組
 ├── location/          # 地點模組
-├── location-categories/ # 地點分類模組
+├── office-types/      # 辦公室類型模組
 ├── conact/            # 聯絡模組
 ├── constant/          # 常數模組
 ├── shared/            # 共享模組

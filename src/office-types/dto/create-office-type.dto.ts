@@ -17,7 +17,7 @@ class I18nNameDto {
     [key: string]: string;
 }
 
-export class CreateLocationCategoryDto {
+export class CreateOfficeTypeDto {
     @IsObject()
     @ValidateNested() // 啟動巢狀驗證
     @Type(() => I18nNameDto) // 轉換為 I18nNameDto 實體以執行內部驗證

@@ -21,6 +21,7 @@ export class ConstantService {
    */
   async findContactLocation(lang: string = 'zh') {
     const locations = await this.locationRepo.find({
+      relations: ['officeType'],
       order: {
         sort: 'ASC',
       },
@@ -30,7 +31,7 @@ export class ConstantService {
     return locations.map((location) => ({
       id: location.id,
       name: location.name[lang] || location.name['en'] || 'N/A',
-      category: location.category[lang] || location.category['en'] || 'N/A',
+      officeType: location.officeType?.name[lang] || location.officeType?.name['en'] || 'N/A',
       sort: location.sort,
     }));
   }

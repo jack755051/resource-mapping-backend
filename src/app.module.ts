@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './products/products.module';
 import { ConactModule } from './conact/conact.module';
 import { ConstantModule } from './constant/constant.module';
-import { LocationCategoriesModule } from './location-categories/location-categories.module';
+import { OfficeTypesModule } from './office-types/office-types.module';
 import { LocationModule } from './location/location.module';
 import { SharedModule } from './shared/shared.module';
 
@@ -35,7 +35,7 @@ import { SharedModule } from './shared/shared.module';
     ProductsModule,
     ConactModule,
     ConstantModule,
-    LocationCategoriesModule,
+    OfficeTypesModule,
     LocationModule,
     SharedModule,
   ],

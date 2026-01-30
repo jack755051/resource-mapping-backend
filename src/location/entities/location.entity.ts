@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { LocationCategory } from "src/location-categories/entities/location-category.entity";
+import { OfficeType } from "src/office-types/entities/office-type.entity";
 
 /**
  * 聯絡地址
@@ -13,9 +13,9 @@ export class Location {
     @Column({ type: 'jsonb', nullable: true })
     name: { [key: string]: string };
 
-    // 類別：總公司 / 分公司 / 辦事處 (i18n)
-    @ManyToOne(() => LocationCategory, (category) => category.locations)
-    category: LocationCategory;
+    // 辦公室類型：總公司 / 分公司 / 辦事處 (i18n)
+    @ManyToOne(() => OfficeType, (officeType) => officeType.locations)
+    officeType: OfficeType;
 
     // 排序用：請維持純數字或簡單字串
     @Column()
