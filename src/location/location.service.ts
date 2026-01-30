@@ -19,13 +19,13 @@ export class LocationService {
   }
 
   async findAll() {
-    return this.repo.find({ relations: ['category'] });
+    return this.repo.find({ relations: ['officeType'] });
   }
 
   async findOne(id: number) {
     const entity = await this.repo.findOne({
       where: { id },
-      relations: ['category'] // 同樣要 Join
+      relations: ['officeType'] // 同樣要 Join
     });
     if (!entity) throw new NotFoundException(`Location with ID ${id} not found`);
     return entity;

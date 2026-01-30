@@ -9,6 +9,10 @@ import { ConstantModule } from './constant/constant.module';
 import { OfficeTypesModule } from './office-types/office-types.module';
 import { LocationModule } from './location/location.module';
 import { SharedModule } from './shared/shared.module';
+import { ProductTypeModule } from './product-type/product-type.module';
+import { SupportTypeModule } from './support-type/support-type.module';
+import { SupportTypesModule } from './support-types/support-types.module';
+import { ProductTypesModule } from './product-types/product-types.module';
 
 @Module({
   imports: [
@@ -38,6 +42,10 @@ import { SharedModule } from './shared/shared.module';
     OfficeTypesModule,
     LocationModule,
     SharedModule,
+    ProductTypeModule,
+    SupportTypeModule,
+    SupportTypesModule,
+    ProductTypesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
