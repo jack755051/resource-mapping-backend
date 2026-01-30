@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { SupportTypesService } from './support-types.service';
 import { CreateSupportTypeDto } from './dto/create-support-type.dto';
 import { UpdateSupportTypeDto } from './dto/update-support-type.dto';
@@ -18,17 +18,17 @@ export class SupportTypesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.supportTypesService.findOne(+id);
+  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.supportTypesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSupportTypeDto: UpdateSupportTypeDto) {
-    return this.supportTypesService.update(+id, updateSupportTypeDto);
+  update(@Param('id', new ParseUUIDPipe()) id: string, @Body() updateSupportTypeDto: UpdateSupportTypeDto) {
+    return this.supportTypesService.update(id, updateSupportTypeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.supportTypesService.remove(+id);
+  remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.supportTypesService.remove(id);
   }
 }

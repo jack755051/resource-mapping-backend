@@ -6,8 +6,8 @@ import { Location } from "../../location/entities/location.entity";
  */
 @Entity()
 export class OfficeType {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column({ type: 'jsonb' })
     name: { zh: string; en: string }; // 類別名稱的多國語系

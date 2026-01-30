@@ -3,16 +3,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductsModule } from './products/products.module';
-import { ConactModule } from './conact/conact.module';
-import { ConstantModule } from './constant/constant.module';
-import { OfficeTypesModule } from './office-types/office-types.module';
-import { LocationModule } from './location/location.module';
+import { ProductsModule } from './modules/products/products.module';
+import { ConactModule } from './modules/conact/conact.module';
+import { OfficeTypesModule } from './modules/office-types/office-types.module';
+import { LocationModule } from './modules/location/location.module';
 import { SharedModule } from './shared/shared.module';
-import { ProductTypeModule } from './product-type/product-type.module';
-import { SupportTypeModule } from './support-type/support-type.module';
-import { SupportTypesModule } from './support-types/support-types.module';
-import { ProductTypesModule } from './product-types/product-types.module';
+import { SupportTypesModule } from './modules/support-types/support-types.module';
+import { ProductTypesModule } from './modules/product-types/product-types.module';
 
 @Module({
   imports: [
@@ -38,12 +35,9 @@ import { ProductTypesModule } from './product-types/product-types.module';
     }),
     ProductsModule,
     ConactModule,
-    ConstantModule,
     OfficeTypesModule,
     LocationModule,
     SharedModule,
-    ProductTypeModule,
-    SupportTypeModule,
     SupportTypesModule,
     ProductTypesModule,
   ],

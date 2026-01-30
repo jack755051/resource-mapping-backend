@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { OfficeTypesService } from './office-types.service';
 import { CreateOfficeTypeDto } from './dto/create-office-type.dto';
 import { UpdateOfficeTypeDto } from './dto/update-office-type.dto';
@@ -18,17 +18,17 @@ export class OfficeTypesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.officeTypesService.findOne(+id);
+  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.officeTypesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOfficeTypeDto: UpdateOfficeTypeDto) {
-    return this.officeTypesService.update(+id, updateOfficeTypeDto);
+  update(@Param('id', new ParseUUIDPipe()) id: string, @Body() updateOfficeTypeDto: UpdateOfficeTypeDto) {
+    return this.officeTypesService.update(id, updateOfficeTypeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.officeTypesService.remove(+id);
+  remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.officeTypesService.remove(id);
   }
 }

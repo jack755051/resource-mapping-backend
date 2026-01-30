@@ -22,16 +22,16 @@ export class LocationService {
     return this.repo.find({ relations: ['officeType'] });
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) { // 💡 改為 string
     const entity = await this.repo.findOne({
       where: { id },
-      relations: ['officeType'] // 同樣要 Join
+      relations: ['officeType']
     });
     if (!entity) throw new NotFoundException(`Location with ID ${id} not found`);
     return entity;
   }
 
-  async update(id: number, updateDto: UpdateLocationDto) {
+  async update(id: string, updateDto: UpdateLocationDto) {
     const entity = await this.repo.findOne({ where: { id } });
     if (!entity) {
       throw new NotFoundException(`Location with ID ${id} not found`);
@@ -42,7 +42,7 @@ export class LocationService {
     return this.repo.save(entity);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const result = await this.repo.delete(id);
     if (result.affected === 0) throw new NotFoundException('找不到該地點以供刪除');
     return { success: true };

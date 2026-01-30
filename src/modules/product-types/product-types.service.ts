@@ -22,13 +22,13 @@ export class ProductTypesService {
     return await this.repo.find({ order: { sort: 'ASC' } });
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const entity = await this.repo.findOne({ where: { id } });
     if (!entity) throw new NotFoundException(`Product type with ID ${id} not found`);
     return entity;
   }
 
-  async update(id: number, updateDto: UpdateProductTypeDto) {
+  async update(id: string, updateDto: UpdateProductTypeDto) {
     const entity = await this.repo.findOne({ where: { id } });
 
     if (!entity) {
@@ -39,7 +39,7 @@ export class ProductTypesService {
     return await this.repo.save(entity);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const result = await this.repo.delete(id);
     if (result.affected === 0) throw new NotFoundException(`Product type with ID ${id} not found`);
     return { success: true };

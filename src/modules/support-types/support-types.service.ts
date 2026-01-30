@@ -22,7 +22,7 @@ export class SupportTypesService {
     return this.repo.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const entity = await this.repo.findOne({ where: { id } });
     if (!entity) {
       throw new NotFoundException(`Office type with ID ${id} not found`);
@@ -30,7 +30,7 @@ export class SupportTypesService {
     return entity;
   }
 
-  async update(id: number, updateSupportTypeDto: UpdateSupportTypeDto) {
+  async update(id: string, updateSupportTypeDto: UpdateSupportTypeDto) {
     const entity = await this.repo.findOne({ where: { id } });
     if (!entity) {
       throw new NotFoundException(`Office type with ID ${id} not found`);
@@ -41,7 +41,7 @@ export class SupportTypesService {
     return this.repo.save(entity);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const entity = await this.findOne(id);
     if (!entity) {
       throw new NotFoundException(`Office type with ID ${id} not found`);

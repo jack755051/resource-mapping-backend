@@ -2,8 +2,8 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class SupportType {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     // 建議統一使用 'name' 或維持 'label'，只要攔截器能抓到即可
     @Column({ type: 'jsonb' })

@@ -20,6 +20,7 @@ services:
     build: .
     # 不再需要 expose ports 到主機，透過 network 溝通即可
     environment:
+      - NODE_ENV=development
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USERNAME=admin

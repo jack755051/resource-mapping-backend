@@ -24,7 +24,7 @@ export class CreateLocationDto {
     @IsNotEmpty()
     sort: number;
 
-    // 關鍵點：前端只需要傳入分類的 ID
+    // 關鍵：因為 OfficeType 的主鍵現在是 UUID (string)，這裡必須改成 string
     @IsObject()
-    officeType: { id: number };
+    officeType: { id: string };
 }

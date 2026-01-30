@@ -18,10 +18,15 @@ export class OfficeTypesService {
   }
 
   async findAll() {
-    return this.repo.find();
+    const [items, total] = await this.repo.findAndCount();
+
+    return {
+      data: items,
+      total: total, // 這裡就是你要的 amount
+    };
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const entity = await this.repo.findOne({ where: { id } });
     if (!entity) {
       throw new NotFoundException(`Office type with ID ${id} not found`);
@@ -29,7 +34,7 @@ export class OfficeTypesService {
     return entity;
   }
 
-  async update(id: number, updateDto: UpdateOfficeTypeDto) {
+  async update(id: string, updateDto: UpdateOfficeTypeDto) {
     const entity = await this.repo.findOne({ where: { id } });
     if (!entity) {
       throw new NotFoundException(`Office type with ID ${id} not found`);
@@ -40,7 +45,7 @@ export class OfficeTypesService {
     return this.repo.save(entity);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const result = await this.repo.delete(id);
     if (result.affected === 0) throw new NotFoundException('找不到該辦公室類型以供刪除');
     return { success: true };
