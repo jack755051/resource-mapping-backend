@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Nginx 作為唯一入口
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs # 存放 SSL 憑證
+    depends_on:
+      - api
+    networks:
+      - backend_network
+
+  # NestJS 後端
+  api:
+    build: .
+    # 不再需要 expose ports 到主機，透過 network 溝通即可
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=admin
+      - DB_PASSWORD=secret_pass
+      - DB_DATABASE=branding_db
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - backend_network
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret_pass
+      - POSTGRES_DB=branding_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d branding_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
