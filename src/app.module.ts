@@ -12,6 +12,7 @@ import { SupportTypesModule } from './modules/support-types/support-types.module
 import { ProductTypesModule } from './modules/product-types/product-types.module';
 import { SupportsModule } from './modules/supports/supports.module';
 import { HistoryModule } from './modules/about/history/history.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -35,6 +36,13 @@ import { HistoryModule } from './modules/about/history/history.module';
       }),
       inject: [ConfigService],
     }),
+    RouterModule.register([
+      {
+        path: 'about', // 這是父層路徑
+        module: HistoryModule, // 此模組下的所有 Controller 都會掛在 /about 下
+      },
+    ]),
+
     ProductsModule,
     ConactModule,
     OfficeTypesModule,
