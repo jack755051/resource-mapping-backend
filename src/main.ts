@@ -11,8 +11,10 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   // 💡 關鍵：註冊全域攔截器
-  app.useGlobalInterceptors(new I18nInterceptor());
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(
+    new I18nInterceptor(),      // 1. 先把多語系物件轉成單一語言字串
+    new TransformInterceptor()  // 2. 再把翻譯後的結果包起來
+  );
 
   // 如果你之前有用到 validation，也記得要在這註冊
   app.useGlobalPipes(new ValidationPipe({ transform: true }));

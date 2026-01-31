@@ -10,6 +10,8 @@ import { LocationModule } from './modules/location/location.module';
 import { SharedModule } from './shared/shared.module';
 import { SupportTypesModule } from './modules/support-types/support-types.module';
 import { ProductTypesModule } from './modules/product-types/product-types.module';
+import { SupportsModule } from './modules/supports/supports.module';
+import { HistoryModule } from './modules/about/history/history.module';
 
 @Module({
   imports: [
@@ -40,6 +42,8 @@ import { ProductTypesModule } from './modules/product-types/product-types.module
     SharedModule,
     SupportTypesModule,
     ProductTypesModule,
+    SupportsModule,
+    HistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
