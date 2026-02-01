@@ -3,12 +3,17 @@ import { ConactService } from './conact.service';
 import { CreateConactDto } from './dto/create-conact.dto';
 import { UpdateConactDto } from './dto/update-conact.dto';
 
-@Controller('conact')
+@Controller('contact')
 export class ConactController {
   constructor(private readonly conactService: ConactService) {}
 
   @Post()
   create(@Body() createConactDto: CreateConactDto) {
+    return this.conactService.create(createConactDto);
+  }
+
+  @Post('form')
+  submitForm(@Body() createConactDto: CreateConactDto) {
     return this.conactService.create(createConactDto);
   }
 

@@ -4,7 +4,7 @@ import { ProductTypesService } from './product-types.service';
 import { CreateProductTypeDto } from './dto/create-product-type.dto';
 import { UpdateProductTypeDto } from './dto/update-product-type.dto';
 
-@Controller('product-types')
+@Controller('constants/products-categories')
 export class ProductTypesController {
   constructor(private readonly service: ProductTypesService) { }
 

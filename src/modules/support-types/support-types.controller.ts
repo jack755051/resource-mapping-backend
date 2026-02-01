@@ -3,7 +3,7 @@ import { SupportTypesService } from './support-types.service';
 import { CreateSupportTypeDto } from './dto/create-support-type.dto';
 import { UpdateSupportTypeDto } from './dto/update-support-type.dto';
 
-@Controller('support-types')
+@Controller('support/categories')
 export class SupportTypesController {
   constructor(private readonly supportTypesService: SupportTypesService) { }
 

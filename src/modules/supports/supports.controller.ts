@@ -4,7 +4,7 @@ import { QuerySupportDto } from './dto/query-support.dto';
 import { CreateSupportDto } from './dto/create-support.dto';
 import { UpdateSupportDto } from './dto/update-support.dto';
 
-@Controller('supports')
+@Controller('support/resources')
 export class SupportsController {
   constructor(private readonly SupportsService: SupportsService) { }
 

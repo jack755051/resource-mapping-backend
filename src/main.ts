@@ -3,12 +3,20 @@ import { AppModule } from './app.module';
 import { I18nInterceptor } from './shared/I18nInterceptor';
 import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.set('trust proxy', 1);
   // 設定全域 API 前綴
   app.setGlobalPrefix('api/v1');
+
+  app.enableCors({
+    origin: true, // 允許任何來源，或者指定 ['https://guangxun.net']
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
 
   // 💡 關鍵：註冊全域攔截器
   app.useGlobalInterceptors(
