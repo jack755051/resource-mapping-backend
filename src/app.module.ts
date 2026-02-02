@@ -12,34 +12,40 @@ import { SupportCategoriesModule } from './modules/support-categories/support-ca
 import { ProductCategoriesModule } from './modules/product-categories/product-categories.module';
 import { SupportsModule } from './modules/supports/supports.module';
 import { HistoryModule } from './modules/about/history/history.module';
-import { RouterModule } from '@nestjs/core';
+import { APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
+import { I18nInterceptor } from './shared/I18nInterceptor';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 @Module({
   imports: [
-    /**先載入config，讓其他module可以取用 */
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    /** 非同步載入 TypeOrm 設定 */
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE'),
-        autoLoadEntities: true, // 自動載入 Entity
-        // entities: [__dirname + '/**/*.entity.{js,ts}'],
-        synchronize: process.env.NODE_ENV !== 'production',
-      }),
       inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        host: config.get<string>('DB_HOST'),
+        port: config.get<number>('DB_PORT'),
+        username: config.get<string>('DB_USERNAME'),
+        password: config.get<string>('DB_PASSWORD'),
+        database: config.get<string>('DB_DATABASE'),
+        autoLoadEntities: true,
+        synchronize: process.env.NODE_ENV !== 'production', // 💡 生產環境務必設為 false
+      }),
     }),
+
+    // 💡 合併後的路由註冊，結構更清晰
     RouterModule.register([
       {
-        path: 'about', // 這是父層路徑
-        module: HistoryModule, // 此模組下的所有 Controller 都會掛在 /about 下
+        path: 'about',
+        module: HistoryModule,
+      },
+      {
+        path: 'contact',
+        children: [
+          { path: 'locations', module: LocationModule },
+          { path: '/', module: ConactModule },
+        ],
       },
     ]),
 
@@ -54,6 +60,17 @@ import { RouterModule } from '@nestjs/core';
     HistoryModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // 💡 關鍵：全域註冊攔截器，這樣才能正確注入 Reflector
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: I18nInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
+    },
+  ],
 })
 export class AppModule { }
