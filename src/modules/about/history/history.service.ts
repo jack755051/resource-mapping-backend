@@ -10,7 +10,7 @@ export class HistoryService {
   constructor(
     @InjectRepository(History)
     private readonly repo: Repository<History>,
-  ) { }
+  ) {}
 
   async create(createDto: CreateHistoryDto) {
     // 💡 使用 as any 避開 JSONB 索引簽名檢查問題
@@ -21,13 +21,14 @@ export class HistoryService {
   async findAll() {
     // 💡 關鍵：確保時間軸永遠按 sort 欄位升序排列
     return await this.repo.find({
-      order: { sort: 'ASC' }
+      order: { sort: 'ASC' },
     });
   }
 
   async findOne(id: string) {
     const entity = await this.repo.findOne({ where: { id } });
-    if (!entity) throw new NotFoundException(`History node with ID ${id} not found`);
+    if (!entity)
+      throw new NotFoundException(`History node with ID ${id} not found`);
     return entity;
   }
 
@@ -39,7 +40,8 @@ export class HistoryService {
 
   async remove(id: string) {
     const result = await this.repo.delete(id);
-    if (result.affected === 0) throw new NotFoundException('找不到該歷史節點以供刪除');
+    if (result.affected === 0)
+      throw new NotFoundException('找不到該歷史節點以供刪除');
     return { success: true };
   }
 }

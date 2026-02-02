@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseUUIDPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { SupportsService } from './supports.service';
 import { QuerySupportDto } from './dto/query-support.dto';
 import { CreateSupportDto } from './dto/create-support.dto';
@@ -6,7 +16,7 @@ import { UpdateSupportDto } from './dto/update-support.dto';
 
 @Controller('support/resources')
 export class SupportsController {
-  constructor(private readonly SupportsService: SupportsService) { }
+  constructor(private readonly SupportsService: SupportsService) {}
 
   @Get()
   async findAll(@Query() query: QuerySupportDto) {

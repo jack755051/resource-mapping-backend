@@ -1,12 +1,21 @@
 // src/product-categories/product-categories.controller.ts
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { ProductCategoriesService } from './product-categories.service';
 import { CreateProductCategoryDto } from './dto/create-product-category.dto';
 import { UpdateProductCategoryDto } from './dto/update-product-category.dto';
 
 @Controller('constants/products-categories')
 export class ProductCategoriesController {
-  constructor(private readonly service: ProductCategoriesService) { }
+  constructor(private readonly service: ProductCategoriesService) {}
 
   @Post()
   create(@Body() createDto: CreateProductCategoryDto) {
@@ -24,7 +33,10 @@ export class ProductCategoriesController {
   }
 
   @Patch(':id')
-  update(@Param('id', new ParseUUIDPipe()) id: string, @Body() updateDto: UpdateProductCategoryDto) {
+  update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() updateDto: UpdateProductCategoryDto,
+  ) {
     return this.service.update(id, updateDto);
   }
 

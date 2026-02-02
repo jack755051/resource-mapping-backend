@@ -1,11 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { SupportCategoriesService } from './support-categories.service';
 import { CreateSupportCategoryDto } from './dto/create-support-category.dto';
 import { UpdateSupportCategoryDto } from './dto/update-support-category.dto';
 
 @Controller('constants/support-categories')
 export class SupportCategoriesController {
-  constructor(private readonly supportCategoriesService: SupportCategoriesService) { }
+  constructor(
+    private readonly supportCategoriesService: SupportCategoriesService,
+  ) {}
 
   @Post()
   create(@Body() createSupportCategoryDto: CreateSupportCategoryDto) {
@@ -23,7 +34,10 @@ export class SupportCategoriesController {
   }
 
   @Patch(':id')
-  update(@Param('id', new ParseUUIDPipe()) id: string, @Body() updateSupportCategoryDto: UpdateSupportCategoryDto) {
+  update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() updateSupportCategoryDto: UpdateSupportCategoryDto,
+  ) {
     return this.supportCategoriesService.update(id, updateSupportCategoryDto);
   }
 

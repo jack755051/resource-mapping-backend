@@ -11,7 +11,7 @@ export class ProductCategoriesService {
   constructor(
     @InjectRepository(ProductCategory)
     private readonly repo: Repository<ProductCategory>,
-  ) { }
+  ) {}
 
   async create(createDto: CreateProductCategoryDto) {
     const entity = this.repo.create(createDto as any);
@@ -24,7 +24,8 @@ export class ProductCategoriesService {
 
   async findOne(id: string) {
     const entity = await this.repo.findOne({ where: { id } });
-    if (!entity) throw new NotFoundException(`Product category with ID ${id} not found`);
+    if (!entity)
+      throw new NotFoundException(`Product category with ID ${id} not found`);
     return entity;
   }
 
@@ -41,7 +42,8 @@ export class ProductCategoriesService {
 
   async remove(id: string) {
     const result = await this.repo.delete(id);
-    if (result.affected === 0) throw new NotFoundException(`Product category with ID ${id} not found`);
+    if (result.affected === 0)
+      throw new NotFoundException(`Product category with ID ${id} not found`);
     return { success: true };
   }
 }

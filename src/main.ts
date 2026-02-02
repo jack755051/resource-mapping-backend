@@ -1,7 +1,8 @@
-import { ValidationPipe } from "@nestjs/common";
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
-import { NestExpressApplication } from "@nestjs/platform-express";
+import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 // src/main.ts
 async function bootstrap() {
@@ -20,6 +21,7 @@ async function bootstrap() {
   // 因為我們已經在 AppModule 透過 APP_INTERCEPTOR 註冊了。
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(process.env.PORT ?? 3000);
 }

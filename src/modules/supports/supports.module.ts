@@ -9,4 +9,4 @@ import { Support } from './entities/support.entity';
   controllers: [SupportsController],
   providers: [SupportsService],
 })
-export class SupportsModule { }
+export class SupportsModule {}

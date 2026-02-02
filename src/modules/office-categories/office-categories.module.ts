@@ -9,4 +9,4 @@ import { OfficeCategory } from './entities/office-category.entity';
   controllers: [OfficeCategoriesController],
   providers: [OfficeCategoriesService],
 })
-export class OfficeCategoriesModule { }
+export class OfficeCategoriesModule {}

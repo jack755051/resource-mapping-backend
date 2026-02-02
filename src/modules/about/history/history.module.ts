@@ -9,4 +9,4 @@ import { History } from './entities/history.entity';
   controllers: [HistoryController],
   providers: [HistoryService],
 })
-export class HistoryModule { }
+export class HistoryModule {}

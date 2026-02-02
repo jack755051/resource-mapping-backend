@@ -10,8 +10,7 @@ export class LocationService {
   constructor(
     @InjectRepository(Location)
     private readonly repo: Repository<Location>,
-  ) { }
-
+  ) {}
 
   async create(createDto: CreateLocationDto) {
     const entity = this.repo.create(createDto);
@@ -22,12 +21,14 @@ export class LocationService {
     return this.repo.find({ relations: ['officeType'] });
   }
 
-  async findOne(id: string) { // 💡 改為 string
+  async findOne(id: string) {
+    // 💡 改為 string
     const entity = await this.repo.findOne({
       where: { id },
-      relations: ['officeType']
+      relations: ['officeType'],
     });
-    if (!entity) throw new NotFoundException(`Location with ID ${id} not found`);
+    if (!entity)
+      throw new NotFoundException(`Location with ID ${id} not found`);
     return entity;
   }
 
@@ -44,7 +45,8 @@ export class LocationService {
 
   async remove(id: string) {
     const result = await this.repo.delete(id);
-    if (result.affected === 0) throw new NotFoundException('找不到該地點以供刪除');
+    if (result.affected === 0)
+      throw new NotFoundException('找不到該地點以供刪除');
     return { success: true };
   }
 }

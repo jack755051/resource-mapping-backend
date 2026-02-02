@@ -1,11 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { HistoryService } from './history.service';
 import { CreateHistoryDto } from './dto/create-history.dto';
 import { UpdateHistoryDto } from './dto/update-history.dto';
 
 @Controller('history')
 export class HistoryController {
-  constructor(private readonly historyService: HistoryService) { }
+  constructor(private readonly historyService: HistoryService) {}
 
   @Post()
   create(@Body() createHistoryDto: CreateHistoryDto) {
@@ -27,7 +36,7 @@ export class HistoryController {
   // 💡 移除 +id
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() updateHistoryDto: UpdateHistoryDto
+    @Body() updateHistoryDto: UpdateHistoryDto,
   ) {
     return this.historyService.update(id, updateHistoryDto);
   }

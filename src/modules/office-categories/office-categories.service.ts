@@ -10,7 +10,7 @@ export class OfficeCategoriesService {
   constructor(
     @InjectRepository(OfficeCategory)
     private readonly repo: Repository<OfficeCategory>,
-  ) { }
+  ) {}
 
   async create(createDto: CreateOfficeCategoryDto) {
     const entity = this.repo.create(createDto);
@@ -47,7 +47,8 @@ export class OfficeCategoriesService {
 
   async remove(id: string) {
     const result = await this.repo.delete(id);
-    if (result.affected === 0) throw new NotFoundException('找不到該辦公室類型以供刪除');
+    if (result.affected === 0)
+      throw new NotFoundException('找不到該辦公室類型以供刪除');
     return { success: true };
   }
 }

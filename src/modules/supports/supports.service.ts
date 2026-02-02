@@ -11,7 +11,7 @@ export class SupportsService {
   constructor(
     @InjectRepository(Support)
     private readonly repo: Repository<Support>,
-  ) { }
+  ) {}
 
   async create(dto: CreateSupportDto) {
     const { categoryId, ...rest } = dto;
@@ -28,7 +28,8 @@ export class SupportsService {
     const { keyword, categoryId, page, limit } = query;
     const skip = (page - 1) * limit;
 
-    const queryBuilder = this.repo.createQueryBuilder('support')
+    const queryBuilder = this.repo
+      .createQueryBuilder('support')
       .leftJoinAndSelect('support.category', 'category')
       .orderBy('support.sort', 'ASC')
       .addOrderBy('support.createdAt', 'DESC')
@@ -39,7 +40,7 @@ export class SupportsService {
     if (keyword) {
       queryBuilder.andWhere(
         "(support.title->>'zh' ILIKE :kw OR support.title->>'en' ILIKE :kw)",
-        { kw: `%${keyword}%` }
+        { kw: `%${keyword}%` },
       );
     }
 
@@ -60,8 +61,8 @@ export class SupportsService {
           total_pages: Math.ceil(total / limit),
           total_items: total,
           items_per_page: Number(limit),
-        }
-      }
+        },
+      },
     };
   }
 

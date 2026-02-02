@@ -1,11 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { LocationService } from './location.service';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
 
 @Controller()
 export class LocationController {
-  constructor(private readonly locationService: LocationService) { }
+  constructor(private readonly locationService: LocationService) {}
 
   @Post()
   create(@Body() createLocationDto: CreateLocationDto) {
@@ -27,7 +36,7 @@ export class LocationController {
   // 💡 這裡也建議加上 Pipe，且移除原本的 +id 轉型
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() updateLocationDto: UpdateLocationDto
+    @Body() updateLocationDto: UpdateLocationDto,
   ) {
     return this.locationService.update(id, updateLocationDto);
   }

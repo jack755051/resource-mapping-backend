@@ -15,6 +15,9 @@ import { HistoryModule } from './modules/about/history/history.module';
 import { APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
 import { I18nInterceptor } from './shared/I18nInterceptor';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { ContactFormModule } from './modules/contact-form/contact-form.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { NotificationModule } from './modules/notification/notification.module';
 
 @Module({
   imports: [
@@ -43,8 +46,9 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
       {
         path: 'contact',
         children: [
-          { path: 'locations', module: LocationModule },
           { path: '/', module: ConactModule },
+          { path: 'form', module: ContactFormModule },
+          { path: 'locations', module: LocationModule },
         ],
       },
     ]),
@@ -58,6 +62,25 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
     ProductCategoriesModule,
     SupportsModule,
     HistoryModule,
+    // 💡 郵件設定
+    MailerModule.forRootAsync({
+      useFactory: (config: ConfigService) => ({
+        transport: {
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true, // 使用 SSL
+          auth: {
+            user: config.get('MAIL_USER'), // 你的 Gmail
+            pass: config.get('MAIL_APP_PASS'), // 申請的應用程式密碼
+          },
+        },
+        defaults: {
+          from: '"San Ring Tech" <noreply@guangxun.net>',
+        },
+      }),
+      inject: [ConfigService],
+    }),
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [
@@ -73,4 +96,4 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
     },
   ],
 })
-export class AppModule { }
+export class AppModule {}

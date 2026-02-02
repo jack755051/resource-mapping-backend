@@ -11,7 +11,7 @@ export class SupportCategoriesService {
   constructor(
     @InjectRepository(SupportCategory)
     private readonly repo: Repository<SupportCategory>,
-  ) { }
+  ) {}
 
   async create(createSupportCategoryDto: CreateSupportCategoryDto) {
     const entity = this.repo.create(createSupportCategoryDto as any);

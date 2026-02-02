@@ -1,27 +1,34 @@
-import { IsString, IsNotEmpty, IsObject, IsNumber, IsOptional, ValidateNested } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsObject,
+  IsNumber,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 class I18nNameDto {
-    @IsString()
-    @IsNotEmpty()
-    zh: string;
+  @IsString()
+  @IsNotEmpty()
+  zh: string;
 
-    @IsString()
-    @IsNotEmpty()
-    en: string;
+  @IsString()
+  @IsNotEmpty()
+  en: string;
 }
 
 export class CreateSupportCategoryDto {
-    @IsObject()
-    @ValidateNested()
-    @Type(() => I18nNameDto)
-    name: I18nNameDto;
+  @IsObject()
+  @ValidateNested()
+  @Type(() => I18nNameDto)
+  name: I18nNameDto;
 
-    @IsString()
-    @IsNotEmpty()
-    value: string;
+  @IsString()
+  @IsNotEmpty()
+  value: string;
 
-    @IsNumber()
-    @IsOptional()
-    sort: number;
+  @IsNumber()
+  @IsOptional()
+  sort: number;
 }
