@@ -1,8 +1,8 @@
-// src/product-types/entities/product-type.entity.ts
+// src/product-categories/entities/product-category.entity.ts
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class ProductType {
+export class ProductCategory {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 

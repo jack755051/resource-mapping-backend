@@ -5,11 +5,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './modules/products/products.module';
 import { ConactModule } from './modules/conact/conact.module';
-import { OfficeTypesModule } from './modules/office-types/office-types.module';
+import { OfficeCategoriesModule } from './modules/office-categories/office-categories.module';
 import { LocationModule } from './modules/location/location.module';
 import { SharedModule } from './shared/shared.module';
-import { SupportTypesModule } from './modules/support-types/support-types.module';
-import { ProductTypesModule } from './modules/product-types/product-types.module';
+import { SupportCategoriesModule } from './modules/support-categories/support-categories.module';
+import { ProductCategoriesModule } from './modules/product-categories/product-categories.module';
 import { SupportsModule } from './modules/supports/supports.module';
 import { HistoryModule } from './modules/about/history/history.module';
 import { RouterModule } from '@nestjs/core';
@@ -45,11 +45,11 @@ import { RouterModule } from '@nestjs/core';
 
     ProductsModule,
     ConactModule,
-    OfficeTypesModule,
+    OfficeCategoriesModule,
     LocationModule,
     SharedModule,
-    SupportTypesModule,
-    ProductTypesModule,
+    SupportCategoriesModule,
+    ProductCategoriesModule,
     SupportsModule,
     HistoryModule,
   ],

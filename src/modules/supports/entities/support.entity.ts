@@ -1,6 +1,6 @@
 // src/modules/support/entities/support.entity.ts
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
-import { SupportType } from "../../support-types/entities/support-type.entity";
+import { SupportCategory } from "../../support-categories/entities/support-category.entity";
 
 export enum ResourceType {
     PDF = 'PDF',
@@ -17,8 +17,8 @@ export class Support {
     @Column({ type: 'jsonb' })
     title: { zh: string; en: string;[key: string]: string };
 
-    @ManyToOne(() => SupportType, { eager: true })
-    category: SupportType;
+    @ManyToOne(() => SupportCategory, { eager: true })
+    category: SupportCategory;
 
     @Column({
         type: 'enum',

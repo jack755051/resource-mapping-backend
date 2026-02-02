@@ -1,5 +1,5 @@
 // src/location/entities/location.entity.ts
-import { OfficeType } from "src/modules/office-types/entities/office-type.entity";
+import { OfficeCategory } from "src/modules/office-categories/entities/office-category.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -26,8 +26,8 @@ export class Location {
     @Column({ nullable: true })
     email: string;
 
-    @ManyToOne(() => OfficeType, (officeType) => officeType.locations)
-    officeType: OfficeType;
+    @ManyToOne(() => OfficeCategory, (officeType) => officeType.locations)
+    officeType: OfficeCategory;
 
     @Column()
     sort: number;

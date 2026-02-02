@@ -1,3 +1,4 @@
+// src/product-categories/dto/create-product-category.dto.ts
 import { IsString, IsNotEmpty, IsObject, IsNumber, IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -11,11 +12,17 @@ class I18nNameDto {
     en: string;
 }
 
-export class CreateSupportTypeDto {
+export class CreateProductCategoryDto {
     @IsObject()
     @ValidateNested()
     @Type(() => I18nNameDto)
     name: I18nNameDto;
+
+    @IsObject()
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => I18nNameDto)
+    description?: I18nNameDto;
 
     @IsString()
     @IsNotEmpty()

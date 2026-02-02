@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class SupportType {
+export class SupportCategory {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 

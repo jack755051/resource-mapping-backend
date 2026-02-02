@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateOfficeTypeDto } from './dto/create-office-type.dto';
-import { UpdateOfficeTypeDto } from './dto/update-office-type.dto';
+import { CreateOfficeCategoryDto } from './dto/create-office-category.dto';
+import { UpdateOfficeCategoryDto } from './dto/update-office-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OfficeType } from './entities/office-type.entity';
+import { OfficeCategory } from './entities/office-category.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class OfficeTypesService {
+export class OfficeCategoriesService {
   constructor(
-    @InjectRepository(OfficeType)
-    private readonly repo: Repository<OfficeType>,
+    @InjectRepository(OfficeCategory)
+    private readonly repo: Repository<OfficeCategory>,
   ) { }
 
-  async create(createDto: CreateOfficeTypeDto) {
+  async create(createDto: CreateOfficeCategoryDto) {
     const entity = this.repo.create(createDto);
     return this.repo.save(entity);
   }
@@ -29,15 +29,15 @@ export class OfficeTypesService {
   async findOne(id: string) {
     const entity = await this.repo.findOne({ where: { id } });
     if (!entity) {
-      throw new NotFoundException(`Office type with ID ${id} not found`);
+      throw new NotFoundException(`Office category with ID ${id} not found`);
     }
     return entity;
   }
 
-  async update(id: string, updateDto: UpdateOfficeTypeDto) {
+  async update(id: string, updateDto: UpdateOfficeCategoryDto) {
     const entity = await this.repo.findOne({ where: { id } });
     if (!entity) {
-      throw new NotFoundException(`Office type with ID ${id} not found`);
+      throw new NotFoundException(`Office category with ID ${id} not found`);
     }
 
     Object.assign(entity, updateDto);

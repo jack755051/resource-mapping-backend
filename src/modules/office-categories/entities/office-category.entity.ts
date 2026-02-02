@@ -2,10 +2,10 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Location } from "../../location/entities/location.entity";
 
 /**
- * 辦公室類型
+ * 辦公室類別
  */
 @Entity()
-export class OfficeType {
+export class OfficeCategory {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
