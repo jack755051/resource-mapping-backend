@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './modules/products/products.module';
-import { ConactModule } from './modules/conact/conact.module';
 import { OfficeCategoriesModule } from './modules/office-categories/office-categories.module';
 import { LocationModule } from './modules/location/location.module';
 import { SharedModule } from './shared/shared.module';
@@ -18,6 +17,8 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import { ContactFormModule } from './modules/contact-form/contact-form.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { NotificationModule } from './modules/notification/notification.module';
+import { ContactModule } from './modules/contact/contact.module';
+import { AuditSubscriber } from './common/subscribers/audit.subscriber';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { NotificationModule } from './modules/notification/notification.module';
         database: config.get<string>('DB_DATABASE'),
         autoLoadEntities: true,
         synchronize: process.env.NODE_ENV !== 'production', // 💡 生產環境務必設為 false
+        subscribers: [AuditSubscriber], // 💡 註冊訂閱者
       }),
     }),
 
@@ -46,15 +48,14 @@ import { NotificationModule } from './modules/notification/notification.module';
       {
         path: 'contact',
         children: [
-          { path: '/', module: ConactModule },
           { path: 'form', module: ContactFormModule },
           { path: 'locations', module: LocationModule },
+          { path: '/', module: ContactModule },
         ],
       },
     ]),
 
     ProductsModule,
-    ConactModule,
     OfficeCategoriesModule,
     LocationModule,
     SharedModule,
@@ -62,20 +63,24 @@ import { NotificationModule } from './modules/notification/notification.module';
     ProductCategoriesModule,
     SupportsModule,
     HistoryModule,
+    ContactFormModule,
+    ContactModule,
     // 💡 郵件設定
     MailerModule.forRootAsync({
       useFactory: (config: ConfigService) => ({
         transport: {
-          host: 'smtp.gmail.com',
-          port: 465,
-          secure: true, // 使用 SSL
+          // 💡 從 .env 讀取 Host，預設為 Gmail
+          host: config.get<string>('SMTP_HOST', 'smtp.gmail.com'),
+          port: config.get<number>('SMTP_PORT', 465),
+          secure: config.get<number>('SMTP_PORT') === 465, // 如果是 465 就啟動加密
           auth: {
-            user: config.get('MAIL_USER'), // 你的 Gmail
-            pass: config.get('MAIL_APP_PASS'), // 申請的應用程式密碼
+            user: config.get<string>('MAIL_USER'),
+            pass: config.get<string>('MAIL_APP_PASS'),
           },
         },
         defaults: {
-          from: '"San Ring Tech" <noreply@guangxun.net>',
+          // 💡 使用 .env 定義的顯示名稱
+          from: config.get<string>('MAIL_FROM'),
         },
       }),
       inject: [ConfigService],
@@ -96,4 +101,4 @@ import { NotificationModule } from './modules/notification/notification.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

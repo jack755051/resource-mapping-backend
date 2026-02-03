@@ -6,7 +6,7 @@ import {
   IsArray,
 } from 'class-validator';
 
-export class CreateConactDto {
+export class CreateContactDto {
   @IsString()
   @IsNotEmpty()
   name: string;

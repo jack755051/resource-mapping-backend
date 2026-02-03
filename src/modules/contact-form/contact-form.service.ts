@@ -11,7 +11,8 @@ import {
   BANNED_KEYWORDS,
   CONTACT_ERROR_MSG,
   ContactFormStatus,
-  ContactFormType,
+  InquiryIntent,
+  INTENT_KEYWORDS,
 } from './constants/contact-form.constants';
 import { NotificationService } from '../notification/notification.service';
 
@@ -21,22 +22,29 @@ export class ContactFormService {
     @InjectRepository(ContactForm)
     private readonly repo: Repository<ContactForm>,
     private readonly notificationService: NotificationService,
-  ) {}
+  ) { }
 
   // 1. 使用者提交
   async create(createDto: CreateContactFormDto) {
-    // 1. 執行商業邏輯檢查
-    this.validateBusinessLogic(createDto);
+    // 1. 違禁詞檢查 (若報錯會直接中斷並回傳 400)
+    this.checkBlacklist(createDto.message);
 
+    // 2. 自動判定諮詢意圖
+    const detectedIntent = this.detectInquiryIntent(createDto.message);
+
+    // 3. 建立實體，將分析結果存入 intent 欄位
     const form = this.repo.create({
       ...createDto,
-      status: ContactFormStatus.UNREAD, // 💡 使用 Enum 預設值
+      intent: detectedIntent, // 👈 存入判定結果
+      status: ContactFormStatus.UNREAD,
+      createdBy: 'guest_user',
     });
 
     const savedForm = await this.repo.save(form);
 
-    // TODO: 串接 MailerService 寄送通知給管理員
-    this.notificationService.sendContactNotification(savedForm);
+    // 4. 寄送通知，這裏可以把 intent 傳給 notificationService 用來做信件分類
+    this.notificationService.sendContactNotification(savedForm, detectedIntent)
+      .catch(err => console.error('背景寄信失敗:', err));
 
     return savedForm;
   }
@@ -85,9 +93,10 @@ export class ContactFormService {
   }
 
   // 5. 更新狀態 (如：標記為「已回覆」)
-  async updateStatus(id: string, status: ContactFormStatus) {
+  async updateStatus(id: string, status: ContactFormStatus, adminName: string = 'admin') {
     const form = await this.findOne(id);
     form.status = status;
+    form.updatedBy = adminName; // 💡 記錄是哪位同事處理的
     return this.repo.save(form);
   }
 
@@ -99,32 +108,24 @@ export class ContactFormService {
   }
 
   // ====== 非controller 呼叫功能 ======
-
-  private validateBusinessLogic(createDto: CreateContactFormDto) {
-    // 1. 檢查黑名單字眼 (使用提取出的常量)
-    if (BANNED_KEYWORDS.some((word) => createDto.message.includes(word))) {
+  /**
+     * 邏輯 A: 黑名單檢查
+     */
+  private checkBlacklist(content: string) {
+    if (BANNED_KEYWORDS.some((word) => content.includes(word))) {
       throw new BadRequestException(CONTACT_ERROR_MSG.BANNED_WORDS);
     }
+  }
 
-    // 2. 檢查特定類型組合 (使用 Enum)
-    const isUrgent = createDto.type.includes(ContactFormType.URGENT);
-    if (isUrgent && !createDto.phone) {
-      throw new BadRequestException(CONTACT_ERROR_MSG.URGENT_REQUIRES_PHONE);
+  /**
+   * 邏輯 B: 自動判定諮詢意圖
+   */
+  private detectInquiryIntent(content: string): InquiryIntent {
+    for (const item of INTENT_KEYWORDS) {
+      if (item.keywords.some(key => content.includes(key))) {
+        return item.intent;
+      }
     }
-
-    // 3. 檢查合作路徑
-    if (createDto.type.includes(ContactFormType.COOPERATION)) {
-      throw new BadRequestException(CONTACT_ERROR_MSG.COOPERATION_VIA_EMAIL);
-    }
-
-    // 4. 檢查維修路徑
-    if (createDto.type.includes(ContactFormType.REPAIR)) {
-      throw new BadRequestException(CONTACT_ERROR_MSG.REPAIR_REQUIRES_PHONE);
-    }
-
-    // 5. 檢查其他類型
-    if (createDto.type.includes(ContactFormType.OTHER)) {
-      throw new BadRequestException(CONTACT_ERROR_MSG.OTHER);
-    }
+    return InquiryIntent.OTHER; // 預設為其他
   }
 }

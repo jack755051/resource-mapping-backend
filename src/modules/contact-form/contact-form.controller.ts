@@ -13,9 +13,9 @@ import { ContactFormService } from './contact-form.service';
 import { CreateContactFormDto } from './dto/create-contact-form.dto';
 import { ContactFormStatus } from './constants/contact-form.constants';
 
-@Controller('contact-form')
+@Controller()
 export class ContactFormController {
-  constructor(private readonly contactFormService: ContactFormService) {}
+  constructor(private readonly contactFormService: ContactFormService) { }
 
   /**
    * 1. 使用者提交諮詢表單 (公開接口)
