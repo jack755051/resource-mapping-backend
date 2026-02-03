@@ -69,18 +69,13 @@ import { AuditSubscriber } from './common/subscribers/audit.subscriber';
     MailerModule.forRootAsync({
       useFactory: (config: ConfigService) => ({
         transport: {
-          // 💡 從 .env 讀取 Host，預設為 Gmail
-          host: config.get<string>('SMTP_HOST', 'smtp.gmail.com'),
-          port: config.get<number>('SMTP_PORT', 465),
-          secure: config.get<number>('SMTP_PORT') === 465, // 如果是 465 就啟動加密
+          host: 'smtp.sendgrid.net',
+          port: 587,
+          secure: false, // 💡 587 埠必須為 false
           auth: {
-            user: config.get<string>('MAIL_USER'),
-            pass: config.get<string>('MAIL_APP_PASS'),
+            user: 'apikey',
+            pass: config.get('MAIL_APP_PASS'), // SG.xxxx
           },
-        },
-        defaults: {
-          // 💡 使用 .env 定義的顯示名稱
-          from: config.get<string>('MAIL_FROM'),
         },
       }),
       inject: [ConfigService],
