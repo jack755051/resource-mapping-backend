@@ -44,9 +44,9 @@ export class ContactFormService {
 
     // 4. 寄送通知，這裏可以把 intent 傳給 notificationService 用來做信件分類
     this.notificationService.sendContactNotification(savedForm, detectedIntent)
-      .catch(err => console.error('背景寄信失敗:', err));
+      .catch(err => console.error('背景發信失敗:', err));
 
-    return savedForm;
+    return await this.findOne(savedForm.id);
   }
 
   // 2. Dashboard 專用：分頁與篩選查詢
