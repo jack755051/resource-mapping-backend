@@ -6,18 +6,20 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# === 第二階段：生產環境 (Runner) ===
-# 💡 直接寫 FROM 即可，不需要再加 --platform，Docker 會自動匹配 buildx 的參數
+# === 第二階段：Runner ===
 FROM node:20-alpine AS runner
 WORKDIR /app
-COPY --from=builder /app/package*.json ./
 
-# 在此階段安裝生產環境套件 (會自動對應目標架構)
+COPY --from=builder /app/package*.json ./
+# 只安裝必要套件，減減輕量
 RUN npm install --omit=dev
 
+# 💡 關鍵：複製整個 dist，包含編譯後的 data-source.js
 COPY --from=builder /app/dist ./dist
+
 RUN apk add --no-cache tzdata
 ENV TZ=Asia/Taipei
 ENV NODE_ENV=production
-EXPOSE 3000
-CMD ["node", "dist/main"]
+
+# 💡 直接跑編譯好的 js 檔案，不需要 ts-node
+CMD ["sh", "-c", "npx typeorm migration:run -d dist/data-source.js && node dist/main"]
