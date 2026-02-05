@@ -1,5 +1,5 @@
 // src/location/entities/location.entity.ts
-import { OfficeCategory } from 'src/modules/office-categories/entities/office-category.entity';
+import { OfficeCategory } from '../../office-categories/entities/office-category.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
