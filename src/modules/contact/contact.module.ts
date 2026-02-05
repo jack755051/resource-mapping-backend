@@ -6,4 +6,4 @@ import { ContactService } from './contact.service';
   controllers: [ContactController],
   providers: [ContactService],
 })
-export class ContactModule { }
+export class ContactModule {}

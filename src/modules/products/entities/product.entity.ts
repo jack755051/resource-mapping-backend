@@ -2,78 +2,89 @@
 import { ProductCategory } from '../../product-categories/entities/product-category.entity';
 
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    UpdateDateColumn,
-    ManyToOne,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 
-// 💡 定義巢狀介面，方便實體內部型別檢查
+// 💡 保持跟 OfficeCategory 一致的結構
+export interface I18nText {
+  zh: string;
+  en: string;
+}
+
+export interface I18nArray {
+  zh: string[];
+  en: string[];
+}
+
 export interface ProductSpecItem {
-    label: string;
-    value: string;
-    type: string;
+  label: I18nText; // 💡 規格名稱通常也需要翻譯
+  value: string;
+  type: string;
 }
 
 export interface ProductDownload {
-    id: string;
-    title: string;
-    type: string;
-    size: number;
-    date: string;
-    url: string;
+  id: string;
+  title: I18nText; // 💡 下載檔案名稱通常也需要翻譯
+  type: string;
+  size: number;
+  date: string;
+  url: string;
 }
 
 @Entity()
 export class Product {
-    @PrimaryGeneratedColumn('uuid') // 比照你的 ContactForm 使用 uuid
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column({ default: 'NEW ARRIVAL' })
-    tag: string;
+  @Column({ type: 'jsonb', default: { zh: '新品上市', en: 'NEW ARRIVAL' } })
+  tag: I18nText; // 💡 標籤改為多語系
 
-    @Column({ unique: true }) // Slug 必須唯一，方便 SEO 查詢
-    slug: string;
+  @Column({ unique: true })
+  slug: string;
 
-    @Column()
-    title: string;
+  @Column({ type: 'jsonb' })
+  title: I18nText; // 💡 標題改為多語系
 
-    @ManyToOne(() => ProductCategory, (category) => category.products, { eager: false })
-    category: ProductCategory;
+  @ManyToOne(() => ProductCategory, (category) => category.products, {
+    eager: false,
+  })
+  category: ProductCategory;
 
-    @Column()
-    image: string; // 主圖路徑
+  @Column()
+  image: string;
 
-    @Column({ nullable: true })
-    href: string; // 預先組好的連結
+  @Column({ nullable: true })
+  href: string;
 
-    @Column()
-    model: string; // 型號
+  @Column()
+  model: string;
 
-    @Column('text', { array: true, default: [] }) // 標籤陣列
-    tags: string[];
+  @Column('text', { array: true, default: [] })
+  tags: string[]; // 這裡的 tags 通常是 SEO 用，維持 string[] 或依需求調整
 
-    // 💡 複雜物件使用 jsonb 儲存
-    @Column({ type: 'jsonb', nullable: true })
-    specs: ProductSpecItem[];
+  @Column({ type: 'jsonb', nullable: true })
+  specs: ProductSpecItem[];
 
-    @Column('text')
-    description: string;
+  @Column({ type: 'jsonb' })
+  description: I18nText; // 💡 描述改為多語系
 
-    @Column('text', { array: true, default: [] })
-    features: string[];
+  @Column({ type: 'jsonb', default: { zh: [], en: [] } })
+  features: I18nArray; // 💡 特點列表改為多語系
 
-    @Column('text', { array: true, default: [] })
-    images: string[]; // 畫廊圖片路徑陣列
+  @Column('text', { array: true, default: [] })
+  images: string[];
 
-    @Column({ type: 'jsonb', nullable: true })
-    downloads: ProductDownload[];
+  @Column({ type: 'jsonb', nullable: true })
+  downloads: ProductDownload[];
 
-    @CreateDateColumn({ type: 'timestamptz' })
-    createdAt: Date;
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: Date;
 
-    @UpdateDateColumn({ type: 'timestamptz' })
-    updatedAt: Date;
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date;
 }

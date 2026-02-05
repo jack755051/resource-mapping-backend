@@ -5,12 +5,12 @@ import { ContactForm } from '../../contact-form/entities/contact-form.entity';
  * 產生具有科技設計感的 Email HTML
  */
 export const getContactNotificationTemplate = (
-    form: ContactForm,
-    config: { label: string; color: string }
+  form: ContactForm,
+  config: { label: string; color: string },
 ): string => {
-    const now = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
+  const now = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
 
-    return `
+  return `
       <!DOCTYPE html>
       <html>
       <head>

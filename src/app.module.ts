@@ -96,4 +96,4 @@ import { AuditSubscriber } from './common/subscribers/audit.subscriber';
     },
   ],
 })
-export class AppModule { }
+export class AppModule {}

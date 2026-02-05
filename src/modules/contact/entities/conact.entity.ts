@@ -1,1 +1,1 @@
-export class Contact { }
+export class Contact {}

@@ -22,7 +22,7 @@ export class ContactFormService {
     @InjectRepository(ContactForm)
     private readonly repo: Repository<ContactForm>,
     private readonly notificationService: NotificationService,
-  ) { }
+  ) {}
 
   // 1. 使用者提交
   async create(createDto: CreateContactFormDto) {
@@ -43,8 +43,9 @@ export class ContactFormService {
     const savedForm = await this.repo.save(form);
 
     // 4. 寄送通知，這裏可以把 intent 傳給 notificationService 用來做信件分類
-    this.notificationService.sendContactNotification(savedForm, detectedIntent)
-      .catch(err => console.error('背景發信失敗:', err));
+    this.notificationService
+      .sendContactNotification(savedForm, detectedIntent)
+      .catch((err) => console.error('背景發信失敗:', err));
 
     return await this.findOne(savedForm.id);
   }
@@ -93,7 +94,11 @@ export class ContactFormService {
   }
 
   // 5. 更新狀態 (如：標記為「已回覆」)
-  async updateStatus(id: string, status: ContactFormStatus, adminName: string = 'admin') {
+  async updateStatus(
+    id: string,
+    status: ContactFormStatus,
+    adminName: string = 'admin',
+  ) {
     const form = await this.findOne(id);
     form.status = status;
     form.updatedBy = adminName; // 💡 記錄是哪位同事處理的
@@ -109,8 +114,8 @@ export class ContactFormService {
 
   // ====== 非controller 呼叫功能 ======
   /**
-     * 邏輯 A: 黑名單檢查
-     */
+   * 邏輯 A: 黑名單檢查
+   */
   private checkBlacklist(content: string) {
     if (BANNED_KEYWORDS.some((word) => content.includes(word))) {
       throw new BadRequestException(CONTACT_ERROR_MSG.BANNED_WORDS);
@@ -122,7 +127,7 @@ export class ContactFormService {
    */
   private detectInquiryIntent(content: string): InquiryIntent {
     for (const item of INTENT_KEYWORDS) {
-      if (item.keywords.some(key => content.includes(key))) {
+      if (item.keywords.some((key) => content.includes(key))) {
         return item.intent;
       }
     }

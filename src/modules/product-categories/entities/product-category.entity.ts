@@ -9,11 +9,11 @@ export class ProductCategory {
 
   // 產品種類名稱 (i18n)
   @Column({ type: 'jsonb' })
-  name: { zh: string; en: string;[key: string]: string };
+  name: { zh: string; en: string; [key: string]: string };
 
   // 💡 產品種類描述 (i18n, 選配) - 完整保留
   @Column({ type: 'jsonb', nullable: true })
-  description: { zh: string; en: string;[key: string]: string };
+  description: { zh: string; en: string; [key: string]: string };
 
   // 識別碼 (如: iot-devices)
   @Column({ unique: true })

@@ -15,7 +15,7 @@ import { ContactFormStatus } from './constants/contact-form.constants';
 
 @Controller()
 export class ContactFormController {
-  constructor(private readonly contactFormService: ContactFormService) { }
+  constructor(private readonly contactFormService: ContactFormService) {}
 
   /**
    * 1. 使用者提交諮詢表單 (公開接口)

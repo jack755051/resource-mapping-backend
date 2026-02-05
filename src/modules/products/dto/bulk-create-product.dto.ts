@@ -1,0 +1,11 @@
+// src/modules/products/dto/bulk-create-product.dto.ts
+import { IsArray, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { CreateProductDto } from './create-product.dto';
+
+export class BulkCreateProductDto {
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => CreateProductDto)
+    products: CreateProductDto[];
+}
