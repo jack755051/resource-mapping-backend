@@ -22,4 +22,4 @@ ENV TZ=Asia/Taipei
 ENV NODE_ENV=production
 
 # 💡 直接跑編譯好的 js 檔案，不需要 ts-node
-CMD ["sh", "-c", "npx typeorm migration:run -d dist/data-source.js && node dist/main"]
+CMD ["sh", "-c", "npm run migration:run:prod && node dist/main"]
