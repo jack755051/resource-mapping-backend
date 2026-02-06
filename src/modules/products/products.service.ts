@@ -46,13 +46,14 @@ export class ProductsService {
     } = query;
 
     const skip = (page - 1) * limit;
-    const ALL_SERIES_ID = '27a8a0d1-61ce-4746-82fe-468403cb5ab2'; // 💡 來自資料庫的 ID
 
     // 1. 基礎過濾條件
     const whereCondition: any = {};
 
-    // 💡 如果 categoryId 不是「全系列」，才加入過濾條件
-    if (categoryId && categoryId !== ALL_SERIES_ID) {
+    // ✅ 簡化邏輯：只有當 categoryId 有值時才過濾
+    // - 沒傳 categoryId → 返回所有產品（全系列）
+    // - 傳了 categoryId → 只返回該分類的產品
+    if (categoryId) {
       whereCondition.category = { id: categoryId };
     }
 
