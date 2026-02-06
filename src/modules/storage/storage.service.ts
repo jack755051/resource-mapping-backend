@@ -47,7 +47,7 @@ export class StorageService {
       // 這裡的 ID 是給前端 Nuxt 用的，方便在列表渲染時作為 key
       // 或者是未來你存入 ProductDownload Entity 時的主鍵
       id: uuidv4(),
-      url: `https://assets.guanguxn.com/${key}`,
+      url: `${process.env.R2_PUBLIC_DOMAIN}/${key}`,
       size: file.size,
       mimeType: file.mimetype,
       originalName: file.originalname,
