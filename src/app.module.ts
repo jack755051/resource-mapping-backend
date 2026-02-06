@@ -19,6 +19,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { NotificationModule } from './modules/notification/notification.module';
 import { ContactModule } from './modules/contact/contact.module';
 import { AuditSubscriber } from './common/subscribers/audit.subscriber';
+import { StorageModule } from './modules/storage/storage.module';
 
 @Module({
   imports: [
@@ -81,6 +82,7 @@ import { AuditSubscriber } from './common/subscribers/audit.subscriber';
       inject: [ConfigService],
     }),
     NotificationModule,
+    StorageModule,
   ],
   controllers: [AppController],
   providers: [
