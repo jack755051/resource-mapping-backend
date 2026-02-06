@@ -1,34 +1,42 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { StorageService } from './storage.service';
-import { CreateStorageDto } from './dto/create-storage.dto';
-import { UpdateStorageDto } from './dto/update-storage.dto';
 
 @Controller('storage')
 export class StorageController {
-  constructor(private readonly storageService: StorageService) {}
+  constructor(private readonly storageService: StorageService) { }
 
-  @Post()
-  create(@Body() createStorageDto: CreateStorageDto) {
-    return this.storageService.create(createStorageDto);
+  // 1. 圖片上傳接口
+  @Post('upload/image')
+  @UseInterceptors(FileInterceptor('file')) // 攔截名為 'file' 的檔案
+  async uploadImage(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 2 }), // 限制 2MB
+          new FileTypeValidator({ fileType: 'image/(jpeg|png|webp)' }),
+        ],
+      }),
+    ) file: Express.Multer.File,
+  ) {
+    // 呼叫 Service 並指定存放於 images 資料夾
+    return this.storageService.upload(file, 'products/images');
   }
 
-  @Get()
-  findAll() {
-    return this.storageService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.storageService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStorageDto: UpdateStorageDto) {
-    return this.storageService.update(+id, updateStorageDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.storageService.remove(+id);
+  // 2. 下載檔案上傳接口 (PDF/Doc)
+  @Post('upload/document')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadDocument(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 10 }), // 限制 10MB
+          new FileTypeValidator({ fileType: 'application/pdf|msword|application/vnd.openxmlformats-officedocument.wordprocessingml.document' }),
+        ],
+      }),
+    ) file: Express.Multer.File,
+  ) {
+    // 呼叫 Service 並指定存放於 downloads 資料夾
+    return this.storageService.upload(file, 'products/downloads');
   }
 }
