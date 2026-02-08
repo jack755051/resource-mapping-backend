@@ -5,8 +5,11 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { QueryProductDto } from './dto/query-product.dto';
 import { BulkCreateProductDto } from './dto/bulk-create-product.dto';
+import { UseInterceptors } from '@nestjs/common';
+import { AnalyticsInterceptor } from '../analytics/interceptors/analytics.interceptor';
 
 @Controller('products')
+@UseInterceptors(AnalyticsInterceptor)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 

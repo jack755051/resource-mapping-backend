@@ -20,6 +20,7 @@ import { NotificationModule } from './modules/notification/notification.module';
 import { ContactModule } from './modules/contact/contact.module';
 import { AuditSubscriber } from './common/subscribers/audit.subscriber';
 import { StorageModule } from './modules/storage/storage.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 
 @Module({
   imports: [
@@ -83,6 +84,7 @@ import { StorageModule } from './modules/storage/storage.module';
     }),
     NotificationModule,
     StorageModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -98,4 +100,4 @@ import { StorageModule } from './modules/storage/storage.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
