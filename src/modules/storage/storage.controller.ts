@@ -13,7 +13,7 @@ export class StorageController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 2 }), // 限制 2MB
+          new MaxFileSizeValidator({ maxSize: parseInt(process.env.MAX_IMAGE_SIZE || '2097152', 10) }), // 限制 2MB
           new FileTypeValidator({ fileType: 'image/(jpeg|png|webp)' }),
         ],
       }),
@@ -30,7 +30,7 @@ export class StorageController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 10 }), // 限制 10MB
+          new MaxFileSizeValidator({ maxSize: parseInt(process.env.MAX_DOCUMENT_SIZE || '10485760', 10) }), // 限制 10MB
           new FileTypeValidator({ fileType: 'application/pdf|msword|application/vnd.openxmlformats-officedocument.wordprocessingml.document' }),
         ],
       }),
