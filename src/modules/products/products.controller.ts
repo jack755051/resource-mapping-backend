@@ -5,11 +5,9 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { QueryProductDto } from './dto/query-product.dto';
 import { BulkCreateProductDto } from './dto/bulk-create-product.dto';
-import { UseInterceptors } from '@nestjs/common';
-import { AnalyticsInterceptor } from '../analytics/interceptors/analytics.interceptor';
+import { TrackEvent } from '../analytics/decorators/track-event.decorator';
 
 @Controller('products')
-@UseInterceptors(AnalyticsInterceptor)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
@@ -25,12 +23,14 @@ export class ProductsController {
   }
 
   @Get()
+  @TrackEvent({ type: 'PRODUCT_LIST', resourceType: 'product' })
   findAll(@Query() query: QueryProductDto) {
     // 💡 傳入 Query 物件
     return this.productsService.findAll(query);
   }
 
   @Get(':idOrSlug')
+  @TrackEvent({ type: 'PRODUCT_VIEW', resourceType: 'product' })
   findOne(@Param('idOrSlug') idOrSlug: string) {
     return this.productsService.findOne(idOrSlug);
   }

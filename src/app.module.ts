@@ -21,6 +21,7 @@ import { ContactModule } from './modules/contact/contact.module';
 import { AuditSubscriber } from './common/subscribers/audit.subscriber';
 import { StorageModule } from './modules/storage/storage.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
+import { AnalyticsInterceptor } from './modules/analytics/interceptors/analytics.interceptor';
 
 @Module({
   imports: [
@@ -98,11 +99,11 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
       provide: APP_INTERCEPTOR,
       useClass: TransformInterceptor,
     },
-    // 💡 全域註冊分析攔截器，避免循環依賴問題
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: AnalyticsInterceptor,
-    // },
+    // 💡 全域註冊分析攔截器（循環依賴已通過 forwardRef 解決）
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AnalyticsInterceptor,
+    },
   ],
 })
 export class AppModule { }

@@ -1,19 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Post, Body, Req } from '@nestjs/common';
 import express from 'express';
 import { AnalyticsService } from './analytics.service';
 import { CreateAnalyticsDto } from './dto/create-analytics.dto';
-import { TrackEvent } from './decorators/track-event.decorator';
-import { ProductsService } from '../products/products.service';
 
 @Controller('analytics')
 export class AnalyticsController {
-  constructor(private readonly analyticsService: AnalyticsService, private readonly productsService: ProductsService) { }
-
-  @Get(':id')
-  @TrackEvent({ type: 'PRODUCT_VIEW', resourceType: 'product' }) // 貼上標籤
-  async findOne(@Param('id') id: string) {
-    return this.productsService.findOne(id);
-  }
+  constructor(private readonly analyticsService: AnalyticsService) { }
 
   // 供前端 (Next.js) 手動回傳紀錄 (例如：按鈕點擊、暫留時間)
   @Post('log')
