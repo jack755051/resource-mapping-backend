@@ -9,6 +9,6 @@ import { AnalyticsInterceptor } from './interceptors/analytics.interceptor';
   imports: [TypeOrmModule.forFeature([AnalyticEvent])],
   controllers: [AnalyticsController],
   providers: [AnalyticsService, AnalyticsInterceptor],
-  exports: [AnalyticsService], // 匯出以便其他模組使用
+  exports: [AnalyticsService, AnalyticsInterceptor], // 匯出以便其他模組使用
 })
 export class AnalyticsModule { }

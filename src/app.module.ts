@@ -98,6 +98,11 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
       provide: APP_INTERCEPTOR,
       useClass: TransformInterceptor,
     },
+    // 💡 全域註冊分析攔截器，避免循環依賴問題
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: AnalyticsInterceptor,
+    // },
   ],
 })
 export class AppModule { }

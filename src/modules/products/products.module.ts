@@ -4,9 +4,13 @@ import { ProductsController } from './products.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { ProductCategory } from '../product-categories/entities/product-category.entity';
+import { AnalyticsModule } from '../analytics/analytics.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product, ProductCategory])],
+  imports: [
+    TypeOrmModule.forFeature([Product, ProductCategory]),
+    AnalyticsModule, // 💡 導入 AnalyticsModule 以使用 AnalyticsInterceptor
+  ],
   controllers: [ProductsController],
   providers: [ProductsService],
 })
