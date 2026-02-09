@@ -27,12 +27,8 @@ export class ContactForm {
   phone: string;
 
   // 💡 紀錄前端帶入的產品標籤
-  @Column({
-    type: 'enum',
-    enum: ContactProductType,
-    array: true,
-    default: [],
-  })
+  // 使用 text[] 以保持靈活性，不受 enum 限制
+  @Column('text', { array: true, default: [] })
   type: ContactProductType[];
 
   @Column('text')

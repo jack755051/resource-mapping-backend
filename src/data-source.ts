@@ -1,7 +1,17 @@
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
+import { existsSync } from 'fs';
+import { resolve } from 'path';
 
-config();
+// 优先加载 .env.local（本地开发），如果不存在则使用 .env（生产环境）
+const envLocalPath = resolve(process.cwd(), '.env.local');
+if (existsSync(envLocalPath)) {
+  console.log('📝 Loading .env.local for local development');
+  config({ path: envLocalPath });
+} else {
+  console.log('📝 Loading .env for production');
+  config();
+}
 
 export const AppDataSource = new DataSource({
   type: 'postgres',

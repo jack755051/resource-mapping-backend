@@ -6,6 +6,7 @@ export enum ContactFormStatus {
 }
 
 export enum ContactProductType {
+  APPOINTMENT = 'appointment', // 預約評估
   COMMUNITY = 'community',
   LPR = 'lpr',
   DVR = 'dvr',
@@ -20,6 +21,7 @@ export enum InquiryIntent {
   COOPERATION = 'cooperation', // 合作
   REPAIR = 'repair', // 維修
   OTHER = 'other', // 其他
+  APPOINTMENT = 'appointment', // 預約
 }
 
 // 意圖判斷的關鍵字對照表
@@ -31,6 +33,7 @@ export const INTENT_KEYWORDS = [
   },
   { intent: InquiryIntent.CONSULT, keywords: ['諮詢', '了解', '想知道'] },
   { intent: InquiryIntent.INQUIRY, keywords: ['詢問', '報價', '多少錢'] },
+  { intent: InquiryIntent.APPOINTMENT, keywords: ['預約', '約看', '看房'] },
 ];
 
 // 違禁詞清單 (未來可以改成從資料庫或環境變數讀取)
