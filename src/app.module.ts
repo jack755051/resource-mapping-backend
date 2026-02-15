@@ -22,6 +22,8 @@ import { AuditSubscriber } from './common/subscribers/audit.subscriber';
 import { StorageModule } from './modules/storage/storage.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { AnalyticsInterceptor } from './modules/analytics/interceptors/analytics.interceptor';
+import { LiveViewChannelModule } from './modules/live-view-channel/live-view-channel.module';
+import { LiveViewGalleryModule } from './modules/live-view-gallery/live-view-gallery.module';
 
 @Module({
   imports: [
@@ -86,6 +88,8 @@ import { AnalyticsInterceptor } from './modules/analytics/interceptors/analytics
     NotificationModule,
     StorageModule,
     AnalyticsModule,
+    LiveViewChannelModule,
+    LiveViewGalleryModule,
   ],
   controllers: [AppController],
   providers: [
