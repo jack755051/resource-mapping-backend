@@ -1,34 +1,66 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe
+} from '@nestjs/common';
 import { LiveViewGalleryService } from './live-view-gallery.service';
 import { CreateLiveViewGalleryDto } from './dto/create-live-view-gallery.dto';
 import { UpdateLiveViewGalleryDto } from './dto/update-live-view-gallery.dto';
 
-@Controller('live-view-gallery')
+@Controller('live-view/galleries')
 export class LiveViewGalleryController {
   constructor(private readonly liveViewGalleryService: LiveViewGalleryService) {}
 
+  /**
+   * POST /api/v1/live-view/galleries
+   * 創建新的畫廊項目
+   */
   @Post()
-  create(@Body() createLiveViewGalleryDto: CreateLiveViewGalleryDto) {
-    return this.liveViewGalleryService.create(createLiveViewGalleryDto);
+  create(@Body() createDto: CreateLiveViewGalleryDto) {
+    return this.liveViewGalleryService.create(createDto);
   }
 
+  /**
+   * GET /api/v1/live-view/galleries
+   * 查詢所有畫廊項目（不分頁，僅返回啟用的項目）
+   */
   @Get()
   findAll() {
     return this.liveViewGalleryService.findAll();
   }
 
+  /**
+   * GET /api/v1/live-view/galleries/:id
+   * 查詢單個畫廊項目
+   */
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.liveViewGalleryService.findOne(+id);
+  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.liveViewGalleryService.findOne(id);
   }
 
+  /**
+   * PATCH /api/v1/live-view/galleries/:id
+   * 更新畫廊項目
+   */
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLiveViewGalleryDto: UpdateLiveViewGalleryDto) {
-    return this.liveViewGalleryService.update(+id, updateLiveViewGalleryDto);
+  update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() updateDto: UpdateLiveViewGalleryDto,
+  ) {
+    return this.liveViewGalleryService.update(id, updateDto);
   }
 
+  /**
+   * DELETE /api/v1/live-view/galleries/:id
+   * 刪除畫廊項目
+   */
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.liveViewGalleryService.remove(+id);
+  remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.liveViewGalleryService.remove(id);
   }
 }
