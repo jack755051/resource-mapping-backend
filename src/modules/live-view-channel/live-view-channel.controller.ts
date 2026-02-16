@@ -28,8 +28,8 @@ export class LiveViewChannelController {
   }
 
   /**
-   * GET /api/v1/live-view/live-monitor-list?page=1&limit=10&search=...
-   * 分頁查詢所有頻道（支援搜尋）- 前端使用的路徑
+   * GET /api/v1/live-view/live-monitor-list?search=...
+   * 查詢所有啟用的頻道（不分頁，返回陣列）- 前端使用的路徑
    */
   @Get('live-monitor-list')
   findAll(@Query() query: QueryLiveViewChannelDto) {

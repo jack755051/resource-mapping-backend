@@ -28,40 +28,28 @@ export class LiveViewChannelService {
   }
 
   /**
-   * 分頁查詢所有頻道（支援搜尋）
+   * 查詢所有啟用的頻道（不分頁）
+   * 前端直接使用，返回簡單陣列
    */
-  async findAll(query: QueryLiveViewChannelDto) {
-    const { page = 1, limit = 10, search } = query;
-    const skip = (page - 1) * limit;
+  async findAll(query: QueryLiveViewChannelDto): Promise<LiveViewChannel[]> {
+    const { search } = query;
 
     // 構建查詢條件
-    let whereCondition: any = {};
+    let whereCondition: any = { isActive: true };
 
     // 如果有搜尋關鍵字，則搜尋 name 或 description
     if (search) {
       const searchPattern = `%${search}%`;
       whereCondition = [
-        { name: ILike(searchPattern) },
-        { description: ILike(searchPattern) },
+        { isActive: true, name: ILike(searchPattern) },
+        { isActive: true, description: ILike(searchPattern) },
       ];
     }
 
-    const [items, total] = await this.repo.findAndCount({
+    return await this.repo.find({
       where: whereCondition,
       order: { sort: 'ASC', createdAt: 'DESC' },
-      take: limit,
-      skip: skip,
     });
-
-    return {
-      items,
-      meta: {
-        total,
-        page,
-        limit,
-        lastPage: Math.ceil(total / limit),
-      },
-    };
   }
 
   /**
