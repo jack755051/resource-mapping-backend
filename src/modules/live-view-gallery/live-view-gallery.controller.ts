@@ -12,7 +12,7 @@ import { LiveViewGalleryService } from './live-view-gallery.service';
 import { CreateLiveViewGalleryDto } from './dto/create-live-view-gallery.dto';
 import { UpdateLiveViewGalleryDto } from './dto/update-live-view-gallery.dto';
 
-@Controller('live-view/galleries')
+@Controller('live-view')
 export class LiveViewGalleryController {
   constructor(private readonly liveViewGalleryService: LiveViewGalleryService) {}
 
@@ -20,16 +20,16 @@ export class LiveViewGalleryController {
    * POST /api/v1/live-view/galleries
    * 創建新的畫廊項目
    */
-  @Post()
+  @Post('galleries')
   create(@Body() createDto: CreateLiveViewGalleryDto) {
     return this.liveViewGalleryService.create(createDto);
   }
 
   /**
-   * GET /api/v1/live-view/galleries
-   * 查詢所有畫廊項目（不分頁，僅返回啟用的項目）
+   * GET /api/v1/live-view/gallery
+   * 查詢所有畫廊項目（不分頁，僅返回啟用的項目）- 前端使用的路徑
    */
-  @Get()
+  @Get('gallery')
   findAll() {
     return this.liveViewGalleryService.findAll();
   }
@@ -38,7 +38,7 @@ export class LiveViewGalleryController {
    * GET /api/v1/live-view/galleries/:id
    * 查詢單個畫廊項目
    */
-  @Get(':id')
+  @Get('galleries/:id')
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.liveViewGalleryService.findOne(id);
   }
@@ -47,7 +47,7 @@ export class LiveViewGalleryController {
    * PATCH /api/v1/live-view/galleries/:id
    * 更新畫廊項目
    */
-  @Patch(':id')
+  @Patch('galleries/:id')
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateDto: UpdateLiveViewGalleryDto,
@@ -59,7 +59,7 @@ export class LiveViewGalleryController {
    * DELETE /api/v1/live-view/galleries/:id
    * 刪除畫廊項目
    */
-  @Delete(':id')
+  @Delete('galleries/:id')
   remove(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.liveViewGalleryService.remove(id);
   }
