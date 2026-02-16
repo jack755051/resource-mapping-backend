@@ -17,4 +17,12 @@ export class CreateLiveViewChannelDto {
   @Min(0)
   @IsOptional()
   sort?: number;
+
+  @IsString()
+  @IsOptional()
+  youtubeChannelId?: string;
+
+  @IsString()
+  @IsOptional()
+  youtubeVideoId?: string;
 }

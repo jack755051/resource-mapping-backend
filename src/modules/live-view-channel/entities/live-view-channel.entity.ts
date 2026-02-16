@@ -45,6 +45,22 @@ export class LiveViewChannel {
   @Column({ default: 0 })
   sort: number;
 
+  /**
+   * YouTube 頻道 ID（用於直播）
+   * 例如: "UCxxxxxxxxxxxxxxxxxxxxxx"
+   * 與 youtubeVideoId 二選一
+   */
+  @Column({ nullable: true })
+  youtubeChannelId: string;
+
+  /**
+   * YouTube 影片 ID（用於特定影片）
+   * 例如: "vOgvP1bukLc"
+   * 與 youtubeChannelId 二選一
+   */
+  @Column({ nullable: true })
+  youtubeVideoId: string;
+
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
