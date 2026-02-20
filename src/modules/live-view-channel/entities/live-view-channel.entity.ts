@@ -46,6 +46,22 @@ export class LiveViewChannel {
   sort: number;
 
   /**
+   * 新增：串流伺服器網址
+   * 例如: "http://100.x.y.z:8889/ch02" (Tailscale IP)
+   * 用於 WebRTC 或 HLS 直接播放
+   */
+  @Column({ nullable: true })
+  streamUrl: string;
+
+  /**
+   * 新增：串流來源類型
+   * 'webrtc' | 'youtube' | 'rtsp'
+   * 讓 Nuxt 前端知道要用 iframe 還是 YouTube Player
+   */
+  @Column({ default: 'webrtc' })
+  provider: string;
+
+  /**
    * YouTube 頻道 ID（用於直播）
    * 例如: "UCxxxxxxxxxxxxxxxxxxxxxx"
    * 與 youtubeVideoId 二選一
