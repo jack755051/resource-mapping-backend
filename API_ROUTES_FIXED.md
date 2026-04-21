@@ -76,7 +76,7 @@
 
 ```bash
 # 1. 在本地测试后端修改
-cd /Users/charlie010583/Desktop/01_private/resource-mapping-backend
+cd /Users/charlie010583/Desktop/01_private/guangxun-tech-site-backend
 npm run build
 npm run start:prod
 

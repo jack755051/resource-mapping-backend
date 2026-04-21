@@ -1,5 +1,5 @@
 schema_version: 1
-repo_id: resource-mapping-backend
+repo_id: guangxun-tech-site-backend
 name: Resource Mapping Backend
 summary: 以 NestJS + TypeORM + PostgreSQL 打造的資源地圖後端 API，涵蓋產品、地點、支援資源、聯絡、即時展示與行為分析。
 owner: jack755051
@@ -130,5 +130,5 @@ tags:
   - portfolio
 
 links:
-  repository: https://github.com/jack755051/resource-mapping-backend
+  repository: https://github.com/jack755051/guangxun-tech-site-backend
   portfolio: https://jack755051.github.io/charlie_portfolio_frontend/portfolio

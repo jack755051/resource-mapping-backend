@@ -46,10 +46,10 @@ docker-compose build
 docker-compose up -d
 
 # 2. 在容器内运行 migration
-docker exec -it resource-mapping-backend npm run migration:run:prod
+docker exec -it guangxun-tech-site-backend npm run migration:run:prod
 
 # 3. 重启容器应用更改
-docker-compose restart resource-mapping-backend
+docker-compose restart guangxun-tech-site-backend
 ```
 
 ## ✅ 验证 Migration
@@ -79,7 +79,7 @@ docker exec -it resource-mapping-db psql -U guangxun -d resource_mapping
 npm run migration:revert
 
 # Docker 容器内
-docker exec -it resource-mapping-backend npm run typeorm -- migration:revert -d dist/data-source.js
+docker exec -it guangxun-tech-site-backend npm run typeorm -- migration:revert -d dist/data-source.js
 ```
 
 ## 📊 Migration 历史
@@ -110,7 +110,7 @@ docker exec -it resource-mapping-db psql -U guangxun -d resource_mapping -c "SEL
 
 ```bash
 # 1. 在本地开发环境测试
-cd /Users/charlie010583/Desktop/01_private/resource-mapping-backend
+cd /Users/charlie010583/Desktop/01_private/guangxun-tech-site-backend
 npm run start:dev  # 自动同步 schema
 
 # 2. 测试功能正常后，准备生产部署
@@ -125,7 +125,7 @@ docker-compose down
 docker-compose up -d
 
 # 5. 查看日志确认启动成功
-docker logs resource-mapping-backend-api-1 -f
+docker logs guangxun-tech-site-backend-api-1 -f
 
 # 6. 验证 API
 curl http://localhost/api/v1/contact/form
@@ -177,7 +177,7 @@ api:
 | 环境 | 命令 | 使用的配置 |
 |------|------|----------|
 | **本地开发** | `npm run migration:run` | `.env.local` (localhost) |
-| **生产环境（Docker）** | `docker exec resource-mapping-backend-api-1 npm run migration:run:prod` | `.env` (db) |
+| **生产环境（Docker）** | `docker exec guangxun-tech-site-backend-api-1 npm run migration:run:prod` | `.env` (db) |
 
 ### 重要提示
 
