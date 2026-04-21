@@ -58,7 +58,7 @@ docker-compose restart guangxun-tech-site-backend
 
 ```bash
 # 连接到 PostgreSQL
-docker exec -it resource-mapping-db psql -U guangxun -d resource_mapping
+docker exec -it guangxun-tech-site-db psql -U guangxun -d branding_db
 
 # 查看 enum 类型的值
 \dT+ contact_form_type_enum
@@ -88,7 +88,7 @@ docker exec -it guangxun-tech-site-backend npm run typeorm -- migration:revert -
 
 ```bash
 # 查看数据库中的 migrations 表
-docker exec -it resource-mapping-db psql -U guangxun -d resource_mapping -c "SELECT * FROM migrations;"
+docker exec -it guangxun-tech-site-db psql -U guangxun -d branding_db -c "SELECT * FROM migrations;"
 ```
 
 ## ⚠️ 注意事项

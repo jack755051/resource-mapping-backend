@@ -99,7 +99,7 @@ git push
 ssh user@your-vps-ip
 
 # 拉取最新代码
-cd /home/user/resource-mapping-deploy
+cd /home/user/guangxun-tech-site-deploy
 git pull
 
 # 重新构建并启动后端
