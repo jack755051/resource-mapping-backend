@@ -1,6 +1,6 @@
-# Resource Mapping Backend
+# Guangxun Tech Site Backend · 光訊科技 企業官網 Backend
 
-> 以 **NestJS + TypeORM + PostgreSQL** 打造的資源地圖後端 API，涵蓋產品、地點、支援資源、聯絡表單、即時展示與行為分析等 15 個領域模組。
+> 以 **NestJS + TypeORM + PostgreSQL** 打造的光訊科技企業官網後端 API，涵蓋產品、地點、支援資源、聯絡表單、即時展示與行為分析等 15 個領域模組。
 
 ![NestJS](https://img.shields.io/badge/NestJS-11.x-E0234E?logo=nestjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)
@@ -13,7 +13,7 @@
 
 ## Purpose
 
-Resource Mapping Backend 是 Portfolio 系列中 **「資源地圖」的後端 API 服務**，負責：
+Guangxun Tech Site Backend 是 Portfolio 系列中 **「光訊科技企業官網」的後端 API 服務**，負責：
 
 - 提供 **多領域資源** 的 CRUD 與查詢 API（產品 / 地點 / 支援服務 / 聯絡資訊）
 - 支援 **多語系 (i18n)** 資料輸出與 **多層分類常數**

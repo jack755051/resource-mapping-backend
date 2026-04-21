@@ -1,7 +1,8 @@
 schema_version: 1
 repo_id: guangxun-tech-site-backend
-name: Resource Mapping Backend
-summary: 以 NestJS + TypeORM + PostgreSQL 打造的資源地圖後端 API，涵蓋產品、地點、支援資源、聯絡、即時展示與行為分析。
+name: Guangxun Tech Site Backend
+display_name: 光訊科技 企業官網 Backend
+summary: 光訊科技 (Guangxun Tech) 企業官網後端 API，以 NestJS + TypeORM + PostgreSQL 打造，涵蓋產品、地點、支援資源、聯絡、即時展示與行為分析。
 owner: jack755051
 status: active
 visibility: public
