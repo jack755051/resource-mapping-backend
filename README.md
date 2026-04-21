@@ -1,193 +1,203 @@
 # Resource Mapping Backend
 
-基於 NestJS 的資源映射系統後端 API，提供產品、地點、聯絡等資源的管理功能。
+> 以 **NestJS + TypeORM + PostgreSQL** 打造的資源地圖後端 API，涵蓋產品、地點、支援資源、聯絡表單、即時展示與行為分析等 15 個領域模組。
 
-## 技術棧
+![NestJS](https://img.shields.io/badge/NestJS-11.x-E0234E?logo=nestjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?logo=postgresql&logoColor=white)
+![TypeORM](https://img.shields.io/badge/TypeORM-0.3-FE0902?logo=typeorm&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
+![Status](https://img.shields.io/badge/status-active-22c55e)
 
-- **框架**: NestJS 11.x
-- **語言**: TypeScript
-- **資料庫**: PostgreSQL 15
-- **ORM**: TypeORM
-- **容器化**: Docker & Docker Compose
-- **反向代理**: Nginx
+---
 
-## 專案結構
+## Purpose
+
+Resource Mapping Backend 是 Portfolio 系列中 **「資源地圖」的後端 API 服務**，負責：
+
+- 提供 **多領域資源** 的 CRUD 與查詢 API（產品 / 地點 / 支援服務 / 聯絡資訊）
+- 支援 **多語系 (i18n)** 資料輸出與 **多層分類常數**
+- 整合 **AWS S3 檔案上傳** 與 **SendGrid 郵件通知**
+- 提供 **即時展示 (Live View)** 頻道與圖庫管理
+- 內建 **行為分析埋點攔截器**，為前端提供可觀測性基礎
+
+## Highlights
+
+| | |
+|---|---|
+| 🧱 架構 | NestJS 11 + Clean-style 分層（module / controller / service / dto / entity） |
+| 📦 領域模組 | 15 個 feature module，依 `src/modules/*` 拆分 |
+| 🌐 多語系 | 全域 `I18nInterceptor` + `@SkipI18n()` 裝飾器 |
+| 📤 檔案上傳 | AWS S3 (`@aws-sdk/client-s3`) |
+| ✉️ 郵件通知 | SendGrid SMTP via `@nestjs-modules/mailer` |
+| 📊 行為分析 | 自動攔截器 + 手動 `POST /analytics/log` 事件 API |
+| 🐳 部署 | Docker Compose 三層架構：Nginx → NestJS → PostgreSQL |
+| 🔒 統一回應 | `TransformInterceptor` + `HttpExceptionFilter` 強制包裹 `ApiResponse<T>` |
+
+## Architecture
+
+```
+┌────────────────────┐
+│      Nginx         │ :80 / :443   （反向代理 / SSL）
+└─────────┬──────────┘
+          │
+          ▼
+┌────────────────────┐
+│    NestJS API      │ :3000        （/api/v1 前綴）
+│  ├─ Interceptors   │              i18n · analytics · transform
+│  ├─ Filters        │              HttpException → ApiResponse
+│  ├─ Subscribers    │              Audit (TypeORM)
+│  └─ Modules (x15)  │              products · live-view · analytics · ...
+└─────────┬──────────┘
+          │
+          ▼
+┌────────────────────┐
+│    PostgreSQL 15   │ :5432        （TypeORM Migration）
+└────────────────────┘
+
+        外部整合：AWS S3（檔案） · SendGrid（信件）
+```
+
+## Project Structure
 
 ```
 src/
-├── products/           # 產品模組
-├── location/          # 地點模組
-├── office-types/      # 辦公室類型模組
-├── conact/            # 聯絡模組
-├── constant/          # 常數模組
-├── shared/            # 共享模組
-├── app.module.ts      # 根模組
-└── main.ts            # 應用程式入口
+├── main.ts                  # 入口（全域前綴 /api/v1、ValidationPipe、CORS）
+├── app.module.ts            # 根模組、TypeORM / Mailer / Router 註冊
+├── data-source.ts           # Migration CLI 用 DataSource
+├── common/
+│   ├── filters/             # HttpExceptionFilter
+│   ├── interceptors/        # TransformInterceptor（ApiResponse<T>）
+│   └── subscribers/         # AuditSubscriber（TypeORM）
+├── shared/
+│   ├── I18nInterceptor.ts   # i18n 語系切換
+│   └── skip-i18n.decorator.ts
+├── migrations/              # TypeORM Migration
+└── modules/
+    ├── products/            # 產品
+    ├── product-categories/  # 產品分類
+    ├── office-categories/   # 辦公類型分類
+    ├── support-categories/  # 支援分類
+    ├── supports/            # 支援資源
+    ├── location/            # 地點
+    ├── contact/             # 聯絡資訊
+    ├── contact-form/        # 聯絡表單
+    ├── about/               # 品牌 / 歷史
+    ├── notification/        # 郵件通知
+    ├── storage/             # S3 檔案上傳
+    ├── analytics/           # 行為分析
+    ├── live-view-channel/   # Live View 頻道
+    └── live-view-gallery/   # Live View 圖庫
 ```
 
-## 環境要求
+## Runbook
 
-- Node.js >= 18.x
-- npm >= 9.x
-- Docker & Docker Compose（用於容器化部署）
-
-## 快速開始
-
-### 本地開發
-
-1. **安裝依賴**
-   ```bash
-   npm install
-   ```
-
-2. **設定環境變數**
-
-   創建 `.env` 文件：
-   ```env
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_USERNAME=admin
-   DB_PASSWORD=secret_pass
-   DB_DATABASE=branding_db
-   ```
-
-3. **啟動開發伺服器**
-   ```bash
-   # 開發模式（自動重載）
-   npm run start:dev
-
-   # 正常模式
-   npm run start
-   ```
-
-   API 將在 `http://localhost:3000` 運行
-
-### Docker 部署
-
-1. **構建並啟動容器**
-   ```bash
-   # 構建應用程式
-   npm run build
-
-   # 啟動所有服務
-   docker-compose up -d --build
-   ```
-
-2. **訪問服務**
-   - API: `http://localhost/api/v1`
-   - 資料庫: `localhost:5432`
-
-3. **查看日誌**
-   ```bash
-   docker-compose logs -f api
-   ```
-
-4. **停止服務**
-   ```bash
-   docker-compose down
-   ```
-
-## API 端點
-
-所有 API 端點都以 `/api/v1` 為前綴。
-
-### 基礎端點
-
-- `GET /api/v1` - 健康檢查
-- `GET /api/v1/products` - 獲取產品列表
-
-更多端點文檔請參考各模組的控制器文件。
-
-## 開發指令
+### 1. 本地開發
 
 ```bash
-# 開發
-npm run start:dev        # 啟動開發伺服器（監聽模式）
-npm run start:debug      # 啟動偵錯模式
+# 安裝依賴
+npm install
 
-# 構建
-npm run build           # 編譯 TypeScript 到 dist/
+# 建立 .env
+cat > .env <<'ENV'
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=admin
+DB_PASSWORD=secret_pass
+DB_DATABASE=branding_db
+ENV
 
-# 代碼品質
-npm run lint            # 執行 ESLint
-npm run format          # 格式化代碼
-
-# 測試
-npm run test            # 單元測試
-npm run test:e2e        # 端到端測試
-npm run test:cov        # 測試覆蓋率
+# 啟動開發伺服器（watch mode）
+npm run start:dev
+# → http://localhost:3000/api/v1
 ```
 
-## Docker 服務架構
+### 2. Docker Compose 一鍵啟動
 
-```
-┌─────────────────┐
-│     Nginx       │ :80, :443
-│  (反向代理)      │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   NestJS API    │ :3000
-│  (應用伺服器)    │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   PostgreSQL    │ :5432
-│   (資料庫)       │
-└─────────────────┘
+```bash
+npm run build
+docker-compose up -d --build
+# → http://localhost/api/v1
+docker-compose logs -f api
+docker-compose down
 ```
 
-## 資料庫
+### 3. 資料庫 Migration
 
-### 連線設定
+```bash
+npm run migration:generate -- src/migrations/<Name>   # 產生
+npm run migration:run                                  # 本地執行
+npm run migration:run:prod                             # 生產（Dockerfile 啟動時自動執行）
+npm run migration:revert                               # 回滾
+```
 
-專案使用 TypeORM 連接 PostgreSQL 資料庫。配置詳見 `app.module.ts` 中的 TypeORM 設定。
+### 4. 測試與品質
 
-### 預設憑證（開發環境）
+```bash
+npm test            # 單元測試
+npm run test:e2e    # 端到端
+npm run test:cov    # 覆蓋率
+npm run lint        # ESLint --fix
+npm run format      # Prettier
+```
 
-- **使用者**: admin
-- **密碼**: secret_pass
-- **資料庫**: branding_db
-- **埠號**: 5432
+## Interfaces (API Endpoints)
 
-**⚠️ 生產環境請務必修改預設密碼**
+所有路由都以 `/api/v1` 為前綴。
 
-## 故障排除
+| Module | Route | 說明 |
+|---|---|---|
+| products | `/products` | 產品資源 CRUD、多語查詢 |
+| product-categories | `/constants/products-categories` | 產品分類常數 |
+| office-categories | `/constants/office-categories` | 辦公類型分類常數 |
+| support-categories | `/constants/support-categories` | 支援資源分類常數 |
+| supports | `/support/resources` | 支援資源管理 |
+| contact | `/contact` | 聯絡資訊總覽 |
+| contact-form | `/contact/form` | 聯絡表單收單、郵件寄送 |
+| location | `/contact/locations` | 聯絡地點 |
+| about | `/about` | 品牌故事與歷史 |
+| storage | `/storage` | AWS S3 檔案上傳 |
+| analytics | `/analytics` | 行為事件紀錄 |
+| live-view-channel | `/live-view` | 即時展示頻道 |
+| live-view-gallery | `/live-view/galleries` | 即時展示圖庫 |
 
-### API 返回 404
+## Dependencies
 
-如果訪問 `/api/v1` 返回 404，請確保：
+### Runtime
+- `@nestjs/*` 11.x、`typeorm` 0.3、`pg` 8
+- `@nestjs-modules/mailer` + `@sendgrid/mail` + `nodemailer`
+- `@aws-sdk/client-s3` 3.x
+- `class-validator` / `class-transformer`
+- `@nestjs/throttler`（速率限制）
 
-1. 已執行 `npm run build` 重新編譯
-2. 重啟 Docker 容器：
-   ```bash
-   docker-compose down
-   docker-compose up -d --build
-   ```
+### Dev
+- `jest` 30、`@nestjs/testing`、`supertest`
+- `eslint` 9 + `prettier` 3、`typescript` 5.7
+- `ts-node` + `tsconfig-paths`
 
-### 資料庫連線失敗
+### Tooling 需求
+- Node.js `>= 18`，npm `>= 9`
+- Docker & Docker Compose（用於容器化部署）
 
-檢查：
-1. PostgreSQL 容器是否正常運行：`docker-compose ps`
-2. 環境變數設定是否正確
-3. 資料庫健康檢查：`docker-compose logs db`
+## Notes
 
-## 貢獻指南
+- **生產環境安全**：`app.module.ts` 中 `synchronize` 僅在 `NODE_ENV !== 'production'` 才啟用；部署前請務必確認 `.env` 覆蓋預設 DB 憑證。
+- **API 回應格式**：所有回應都經 `TransformInterceptor` 包裹為 `{ statusCode, message, data }`；錯誤由 `HttpExceptionFilter` 統一轉換。
+- **i18n**：預設掛載全域 `I18nInterceptor`，如需跳過請在 handler 使用 `@SkipI18n()`。
+- **即時展示**：`live-view-channel` 與 `live-view-gallery` 皆掛載於 `/live-view`，於 `feature/build-live-view` 分支中建立。
 
-1. Fork 本專案
-2. 創建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交變更 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 開啟 Pull Request
+## Roadmap
 
-## 授權
+- [ ] 完整 API 規格文件化（OpenAPI / Swagger）
+- [ ] 引入 JWT 認證與 RBAC 授權
+- [ ] 健康檢查 (`/health`) 與 Prometheus (`/metrics`) 端點
+- [ ] Redis 快取層
+- [ ] E2E 測試覆蓋核心流程
 
-本專案採用 UNLICENSED 授權。
+## License
 
-## 相關資源
+UNLICENSED — Portfolio 專用，保留一切權利。
 
-- [NestJS 官方文檔](https://docs.nestjs.com)
-- [TypeORM 文檔](https://typeorm.io)
-- [PostgreSQL 文檔](https://www.postgresql.org/docs/)
+## Links
+
+- Portfolio: <https://jack755051.github.io/charlie_portfolio_frontend/portfolio>

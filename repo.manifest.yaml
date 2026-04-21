@@ -1,0 +1,134 @@
+schema_version: 1
+repo_id: resource-mapping-backend
+name: Resource Mapping Backend
+summary: 以 NestJS + TypeORM + PostgreSQL 打造的資源地圖後端 API，涵蓋產品、地點、支援資源、聯絡、即時展示與行為分析。
+owner: jack755051
+status: active
+visibility: public
+primary_language: TypeScript
+license: UNLICENSED
+
+stack:
+  - nestjs
+  - typescript
+  - typeorm
+  - postgresql
+  - docker
+  - docker-compose
+  - nginx
+  - aws-s3
+  - sendgrid
+
+entrypoints:
+  api: src/main.ts
+  app_module: src/app.module.ts
+  data_source: src/data-source.ts
+  dockerfile: Dockerfile
+  docker_compose: docker-compose.yml
+
+commands:
+  install: npm install
+  dev: npm run start:dev
+  build: npm run build
+  start: npm run start:prod
+  test: npm test
+  test_e2e: npm run test:e2e
+  test_coverage: npm run test:cov
+  lint: npm run lint
+  format: npm run format
+  migration_generate: npm run migration:generate
+  migration_run: npm run migration:run
+  migration_revert: npm run migration:revert
+  docker_up: docker-compose up -d --build
+  docker_down: docker-compose down
+
+interfaces:
+  api: true
+  worker: false
+  web_ui: false
+  cli: false
+
+runtime:
+  node: ">=18"
+  npm: ">=9"
+  database: postgresql-15
+  api_prefix: /api/v1
+  default_port: 3000
+
+services:
+  - name: nginx
+    role: reverse-proxy
+    ports: [80, 443]
+  - name: api
+    role: application
+    ports: [3000]
+  - name: db
+    role: database
+    image: postgres:15-alpine
+    ports: [5432]
+
+modules:
+  - id: products
+    route: /api/v1/products
+    summary: 產品資源 CRUD 與 i18n 查詢
+  - id: product-categories
+    route: /api/v1/constants/products-categories
+    summary: 產品分類常數
+  - id: office-categories
+    route: /api/v1/constants/office-categories
+    summary: 辦公類型分類常數
+  - id: support-categories
+    route: /api/v1/constants/support-categories
+    summary: 支援資源分類常數
+  - id: supports
+    route: /api/v1/support/resources
+    summary: 支援資源管理
+  - id: location
+    route: /api/v1/contact/locations
+    summary: 聯絡地點資料
+  - id: contact
+    route: /api/v1/contact
+    summary: 聯絡資訊總覽
+  - id: contact-form
+    route: /api/v1/contact/form
+    summary: 聯絡表單收單與 Mailer 寄送
+  - id: about
+    route: /api/v1/about
+    summary: 品牌故事與歷史
+  - id: notification
+    route: —
+    summary: 郵件通知共用模組 (SendGrid)
+  - id: storage
+    route: /api/v1/storage
+    summary: AWS S3 檔案上傳
+  - id: analytics
+    route: /api/v1/analytics
+    summary: 使用者行為事件紀錄與自動攔截
+  - id: live-view-channel
+    route: /api/v1/live-view
+    summary: 即時展示頻道 CRUD
+  - id: live-view-gallery
+    route: /api/v1/live-view/galleries
+    summary: 即時展示圖庫管理
+
+highlights:
+  - 多模組 NestJS 架構，依領域拆分 15 個 feature module
+  - 全域 `ApiResponse<T>` 回應攔截與 HttpException 統一錯誤格式
+  - i18n Interceptor + `@SkipI18n` 裝飾器支援多語輸出
+  - TypeORM Migration 流程（開發自動同步、生產透過 CI 執行）
+  - AWS S3 檔案上傳與 SendGrid 郵件整合
+  - Docker Compose 一鍵起 Nginx + NestJS + PostgreSQL 三層架構
+  - 埋點攔截器與手動事件 API 支援前端行為分析
+
+tags:
+  - backend
+  - api
+  - nestjs
+  - typeorm
+  - postgresql
+  - docker
+  - portfolio
+
+links:
+  repository: https://github.com/jack755051/resource-mapping-backend
+  portfolio: https://jack755051.github.io/charlie_portfolio_frontend/portfolio
